@@ -1,0 +1,7 @@
+www/
+site
+.DS_Store
+*.swp
+*.swo
+*~
+test_path
