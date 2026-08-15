@@ -66,6 +66,16 @@ def curlbash [...args] {
 > "foo bar foo bar foo bar foo
 > bar foo bar foo bar foo bar"
 
+## Tables
+
+| Thing! | Thing 2! | Thing 3! | Thing 4! |
+| ------ | -------- | -------- | -------- |
+| fuck   | penis    | your mom | shit     |
+| fuck   | penis    | your mom | shit     |
+| fuck   | penis    | your mom | shit     |
+| fuck   | penis    | your mom | shit     |
+| fuck   | penis    | your mom | shit     |
+
 ## Line thing
 
 ---
