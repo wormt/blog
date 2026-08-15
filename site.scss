@@ -188,6 +188,21 @@ img {
   border-radius: 4px;
 }
 
+blockquote {
+  margin: 1.5rem 0;
+  padding: 0.5rem 1.5rem;
+  font-style: italic;
+  color: var(--color-text-muted);
+  border-left: 3px solid var(--color-border);
+  background: var(--color-surface);
+}
+blockquote p {
+  margin: 0;
+}
+blockquote p + p {
+  margin-top: 0.75rem;
+}
+
 ::selection {
   background: var(--color-accent-purple);
   color: #fff;
