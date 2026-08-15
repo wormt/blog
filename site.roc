@@ -16,6 +16,7 @@ PostInfo := {
     date: Str,
     url: Str,
     tags: List(Str),
+    description: Str,
 }
 
 html_head : Str, Str, List(Str) => Str
@@ -39,7 +40,7 @@ html_article = |title, date, tags, body|
 
 html_index_entry : PostInfo -> Str
 html_index_entry = |post| 
-    "<h2><a href='${post.url}'>${post.title}</a></h2>\n<p class='meta'>${post.date}</p>\n"
+    "<h2><a href='${post.url}'>${post.title}</a></h2>\n<p class='meta'>${post.description}</p>\n<p class='meta'>${post.date}</p>\n"
 
 html_index_page : List(PostInfo) -> Str
 html_index_page = |posts| 
@@ -148,7 +149,7 @@ collect_metadata! = |pages| {
                 Err(_) => "default.html"
             }
             post_url = Str.concat("/posts/", filename_str)
-            Ok(List.append(acc, { title: fm.title, date: fm.date, url: post_url, tags: fm.tags }))
+            Ok(List.append(acc, { title: fm.title, date: fm.date, url: post_url, tags: fm.tags, description: fm.description }))
         }
     )
 }
