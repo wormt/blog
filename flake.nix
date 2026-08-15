@@ -10,7 +10,7 @@
     let
       system = "x86_64-linux";
       pkgs = nixpkgs.legacyPackages.${system};
-      tailwind = pkgs.tailwindcss_4;
+      sass = pkgs.sass;
     in
     {
       apps.${system} = {
@@ -19,9 +19,9 @@
           program = "${
             pkgs.writeShellApplication {
               name = "blog-css";
-              runtimeInputs = [ tailwind ];
+              runtimeInputs = [ sass ];
               text = ''
-                tailwindcss build -i site.css -o www/site.css -m
+                sass --style=expanded --sourcemap=none site.scss > www/site.css
               '';
             }
           }/bin/blog-css";
@@ -46,12 +46,13 @@
             pkgs.writeShellApplication {
               name = "blog-build";
               runtimeInputs = [
-                tailwind
+                sass
                 pkgs.coreutils
+                pkgs.lightningcss
               ];
               text = ''
                 echo "[blog] building CSS..."
-                tailwindcss build -i site.css -o www/site.css -m
+                sass --style=expanded --sourcemap=none site.scss | lightningcss --minify -o www/site.css
                 echo "[blog] generating HTML..."
                 exec ./site ./content/ ./www/
               '';
@@ -68,8 +69,8 @@
           pkgs.nushell
           pkgs.just
           pkgs.just-lsp
-          pkgs.tailwindcss_4
-          pkgs.tailwindcss-language-server
+          pkgs.sass
+          pkgs.lightningcss
         ];
       };
     };

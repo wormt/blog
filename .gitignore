@@ -5,3 +5,4 @@ site
 *.swo
 *~
 test_path
+.sass-cache
