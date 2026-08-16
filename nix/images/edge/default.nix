@@ -4,8 +4,6 @@
   config = {
     caliga.os = "fedora";
     caliga.core.enable = true;
-    caliga.core.users.enable = true;
-    caliga.core.systemd.enable = true;
     system.stateVersion = "26.05";
 
     layeredImage = {
@@ -18,23 +16,6 @@
         finalImageTag = "44";
         arch = "amd64";
       };
-    };
-
-    # depends on pid 1
-    services.bootc-update = {
-      enable = true;
-      schedule = {
-        onBootSec = "20s";
-        onUnitActiveSec = "20s";
-      };
-    };
-
-    # depends on pid 1
-    users.users.admin = {
-      isNormalUser = true;
-      uid = 1000;
-      description = "wormt";
-      initialPassword = "astronomy-doorknob-amusing-brewery";
     };
 
     environment.systemPackages = [ pkgs.nginx ];

@@ -11,7 +11,11 @@
     caligaConfigurations.x86_64-linux = {
       edge = inputs.nix-caliga.lib.makeCaligaConfigurations {
         pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
-        modules = [ ./images/edge ];
+        modules = [
+          ./images/edge
+          ./images/edge/users
+          ./images/edge/services
+        ];
       };
     };
   };
