@@ -1,0 +1,48 @@
+{
+  "nodes": {
+    "nix-caliga": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782441864,
+        "narHash": "sha256-ugaLrN0wd7mwPnaC9CwP59J+XSz2x9hDFSTXhe4Lg4A=",
+        "owner": "nix-caliga",
+        "repo": "nix-caliga",
+        "rev": "91cf1948a1ac2e592da0f307189050917e1d20eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-caliga",
+        "repo": "nix-caliga",
+        "type": "github"
+      }
+    },
+    "nixpkgs": {
+      "locked": {
+        "lastModified": 1786862985,
+        "narHash": "sha256-FBJRXmbGXiSUDvYEbfLYRkckayyZ6SK1UEqhCrIZ2Cs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e5bdc4a41d4c072fe1e3787eaa0320a384741d44",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "root": {
+      "inputs": {
+        "nix-caliga": "nix-caliga",
+        "nixpkgs": "nixpkgs"
+      }
+    }
+  },
+  "root": "root",
+  "version": 7
+}
