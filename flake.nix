@@ -110,6 +110,8 @@
           roc-overlay.packages.${system}.nightly
           pkgs.nixd
           pkgs.nixfmt
+          pkgs.opentofu
+          pkgs.tofu-ls
           pkgs.nushell
           pkgs.sass
           pkgs.lightningcss
