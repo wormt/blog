@@ -14,6 +14,22 @@
     in
     {
       apps.${system} = {
+        build = {
+          type = "app";
+          program = "${
+            pkgs.writeShellApplication {
+              name = "blog-build";
+              runtimeInputs = [
+                roc-overlay.packages.${system}.nightly
+              ];
+              text = ''
+                echo "[blog] building renderer..."
+                roc build package/Render.roc --output=render
+              '';
+            }
+          }/bin/blog-build";
+        };
+
         css = {
           type = "app";
           program = "${
@@ -21,7 +37,7 @@
               name = "blog-css";
               runtimeInputs = [ sass ];
               text = ''
-                sass --style=expanded --sourcemap=none site.scss > www/site.css
+                sass --style=expanded --sourcemap=none package/styles/main.scss > www/site.css
               '';
             }
           }/bin/blog-css";
@@ -34,30 +50,30 @@
               name = "blog-ssg";
               runtimeInputs = [ pkgs.coreutils ];
               text = ''
-                exec ./site ./content/ ./www/
+                exec ./render ./content/ ./www/
               '';
             }
           }/bin/blog-ssg";
         };
 
-        build = {
+        render = {
           type = "app";
           program = "${
             pkgs.writeShellApplication {
-              name = "blog-build";
+              name = "blog-render";
               runtimeInputs = [
                 sass
                 pkgs.coreutils
                 pkgs.lightningcss
               ];
               text = ''
-                echo "[blog] building CSS..."
-                sass --style=expanded --sourcemap=none site.scss | lightningcss --minify -o www/site.css
-                echo "[blog] generating HTML..."
-                exec ./site ./content/ ./www/
+                echo "[blog] processing CSS..."
+                sass --style=expanded --sourcemap=none package/styles/main.scss | lightningcss --minify -o www/site.css
+                echo "[blog] rendering HTML..."
+                exec ./render ./content/ ./www/
               '';
             }
-          }/bin/blog-build";
+          }/bin/blog-render";
         };
       };
 
