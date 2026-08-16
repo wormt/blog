@@ -1,10 +1,12 @@
-Frontmatter :: {
-	title : Str,
-	date : Str,
-	tags : List(Str),
-	description : Str,
-}.{
-	parse_frontmatter_block : Str -> Frontmatter
+Frontmatter :: {}.{
+	Metadata : {
+		title : Str,
+		date : Str,
+		tags : List(Str),
+		description : Str,
+	}
+
+	parse_frontmatter_block : Str -> Metadata
 	parse_frontmatter_block = |block| {
 		lines = Str.split_on(block, "\n")
 		lines.fold({ title: "", date: "", tags: [], description: "" }, |acc, line| {
@@ -25,7 +27,7 @@ Frontmatter :: {
 			})
 	}
 
-	parse_frontmatter! : Str => Frontmatter
+	parse_frontmatter! : Str => Metadata
 	parse_frontmatter! = |source| {
 		match Str.split_first(source, "---\n") {
 			Ok(result) => {
