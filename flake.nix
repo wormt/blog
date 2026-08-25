@@ -112,6 +112,8 @@
           pkgs.nixfmt
           pkgs.opentofu
           pkgs.tofu-ls
+          pkgs.just
+          pkgs.just-lsp
           pkgs.nushell
           pkgs.sass
           pkgs.lightningcss
