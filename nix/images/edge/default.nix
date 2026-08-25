@@ -11,8 +11,8 @@
       tag = "latest";
       fromImage = pkgs.dockerTools.pullImage {
         imageName = "quay.io/fedora/fedora-bootc";
-        imageDigest = "sha256:295dd6ecda23780e9babf6a889914762ae118c621819d777c879992884d2b681";
-        sha256 = "sha256-wODwf4JGTuJoGjK/QRwZIM97D/abmFsKvQ5wISua7qM=";
+        imageDigest = "sha256:b002637dc48abbb1f25f6ab0d8d0572c3b753a691d2917a3fb47a76a10d8b57d"; # registry hash
+        sha256 = "sha256-C01WDuFVrskA+LFoHeBRLMto7AcY88af/qUGXHzz1XA=";                          # nix store hash
         finalImageTag = "44";
         arch = "amd64";
       };
