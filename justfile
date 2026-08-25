@@ -26,7 +26,11 @@ qcow:
 	{{BCVK_PATH}} to-disk {{IMAGE_URL}}/{{IMAGE_NAME}}:{{IMAGE_TAG}} nix/{{IMAGE_NAME}}.qcow2 --format=qcow2 --disk-size={{DISK_SIZE}}
 
 vm:
-	{{BCVK_PATH}} ephemeral run nix/{{IMAGE_NAME}}.qcow2 --rm --name={{VM_NAME}} --detach --console
+	-just podman rm -f {{ VM_NAME }}
+	distrobox-host-exec bash -lc 'export PATH=/var/home/asv/.local/bin:$PATH; cd /var/home/asv/workspaces/roc/blog2 && bcvk ephemeral run {{ IMAGE_URL }}/{{ IMAGE_NAME }}:{{ IMAGE_TAG }} --rm --name={{ VM_NAME }} --detach --ssh-keygen --console'
+
+vm-ssh *args:
+	distrobox-host-exec bash -lc 'export PATH=/var/home/asv/.local/bin:$PATH; cd /var/home/asv/workspaces/roc/blog2 && bcvk ephemeral ssh {{ VM_NAME }} {{ args }}'
 
 build-qcow-vm: build qcow vm
 	@echo "VM {{VM_NAME}} running"
