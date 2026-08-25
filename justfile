@@ -1,9 +1,9 @@
-DISK_SIZE  := "10G"
-VM_NAME    := "edge-blog"
-BCVK_PATH  := "/home/asv/.local/bin/bcvk"
-IMAGE_URL  := "ghcr.io/wormt"
-IMAGE_NAME := "edge"
-IMAGE_TAG  := "latest"
+DISK_SIZE     := "10G"
+VM_NAME       := "edge-blog"
+BCVK_PATH     := "/home/asv/.local/bin/bcvk"
+IMAGE_URL     := "ghcr.io/wormt"
+IMAGE_NAME    := "edge"
+IMAGE_TAG     := "latest"
 PODMAN_SOCKET := "unix:///run/user/6969/podman/podman.sock"
 
 podman *args:
