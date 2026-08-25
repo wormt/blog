@@ -4,6 +4,19 @@ BCVK_PATH  := "/home/asv/.local/bin/bcvk"
 IMAGE_URL  := "ghcr.io/wormt"
 IMAGE_NAME := "edge"
 IMAGE_TAG  := "latest"
+PODMAN_SOCKET := "unix:///run/user/6969/podman/podman.sock"
+
+podman *args:
+	podman --remote --url {{PODMAN_SOCKET}} {{args}}
+
+podman-images:
+	podman --remote --url {{PODMAN_SOCKET}} images
+
+podman-ps:
+	podman --remote --url {{PODMAN_SOCKET}} ps
+
+podman-load *args:
+	podman --remote --url {{PODMAN_SOCKET}} load -i {{args}}
 
 build:
 	nix build /home/asv/workspaces/roc/blog2/nix#caligaConfigurations.x86_64-linux.edge.config.build.image --refresh --repair
