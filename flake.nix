@@ -119,10 +119,16 @@
           pkgs.sass
           pkgs.lightningcss
           pkgs.javaPackages.compiler.temurin-bin.jdk-25 
+          pkgs.jdt-language-server
+          pkgs.lombok
           pkgs.pulumi
           pkgs.pulumiPackages.pulumi-java
           pkgs.gradle
         ];
+
+        shellHook = ''
+          export LOMBOK_PATH="${pkgs.lombok}/share/java/lombok.jar"
+        '';
       };
     };
 }
