@@ -8,3 +8,4 @@ test_path
 .sass-cache
 *.qcow2
 *.tar
+result
