@@ -1,12 +1,29 @@
+# blog
 www/
 render
+
+# editor
 .DS_Store
 *.swp
 *.swo
 *~
 test_path
+
+# sass
 .sass-cache
+
+# nix
 *.qcow2
 *.tar
 result
+
+# pulumi
 Pulumi.dev.yaml
+
+# java
+bin/
+.gradle/
+build/
+.project
+.classpath
+.settings/

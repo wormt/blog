@@ -121,8 +121,12 @@
           pkgs.javaPackages.compiler.temurin-bin.jdk-25 
           pkgs.jdt-language-server
           pkgs.lombok
+          pkgs.azure-cli
           pkgs.pulumi
           pkgs.pulumiPackages.pulumi-java
+          pkgs.pulumiPackages.pulumi-azure-native
+          pkgs.pulumiPackages.pulumi-random
+          pkgs.google-java-format
           pkgs.gradle
         ];
 
