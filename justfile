@@ -35,7 +35,7 @@ podman-load *args:
 	{{PODMAN}} load -i {{args}}
 
 build:
-	nix build /home/asv/workspaces/roc/blog2/nix#caligaConfigurations.x86_64-linux.edge.config.build.image --refresh --repair
+	nix build /home/asv/workspaces/roc/blog2/nix#caligaConfigurations.x86_64-linux.edge.config.build.image
 	./result > nix/image.tar
 	@echo "image built at ./nix/image.tar"
 	{{PODMAN}} load -i nix/image.tar
@@ -46,6 +46,9 @@ vm:
 
 vm-ssh *args:
 	{{BCVK}} ephemeral ssh {{ VM_NAME }} {{ args }}'
+
+tunnel local_port="8080" guest_port="80":
+	./scripts/tunnel-bridge.nu {{ local_port }} {{ guest_port }}
 
 rebuild: build vm
 	@echo "VM {{VM_NAME}} rebuilt"
