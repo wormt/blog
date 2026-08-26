@@ -18,7 +18,7 @@ test_path
 result
 
 # pulumi
-Pulumi.dev.yaml
+Pulumi.*.yaml
 
 # java
 bin/
