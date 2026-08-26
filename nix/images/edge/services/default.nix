@@ -1,4 +1,6 @@
 {
+  imports = [ ./nginx.nix ];
+
   # depends on pid 1
   services.bootc-update = {
     enable = true;
