@@ -56,7 +56,23 @@
     "root": {
       "inputs": {
         "nixpkgs": "nixpkgs",
-        "roc-overlay": "roc-overlay"
+        "roc-overlay": "roc-overlay",
+        "wormtpkgs": "wormtpkgs"
+      }
+    },
+    "wormtpkgs": {
+      "locked": {
+        "lastModified": 1787727978,
+        "narHash": "sha256-46pqYIOeqSwQ4Aa1PsO/VL09bB0JHlb8MtMuWhm6rsk=",
+        "owner": "wormt",
+        "repo": "nixpkgs",
+        "rev": "ba73308f18328eaeb548f8bd090c5c2c2726462c",
+        "type": "github"
+      },
+      "original": {
+        "owner": "wormt",
+        "repo": "nixpkgs",
+        "type": "github"
       }
     }
   },

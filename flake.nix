@@ -1,15 +1,16 @@
 {
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    wormtpkgs.url = "github:wormt/nixpkgs";
     roc-overlay.url = "github:roc-lang/roc-overlay";
     roc-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs =
-    { nixpkgs, roc-overlay, ... }:
+    { wormtpkgs, roc-overlay, ... }:
     let
       system = "x86_64-linux";
-      pkgs = nixpkgs.legacyPackages.${system};
+      pkgs = wormtpkgs.legacyPackages.${system};
       sass = pkgs.sass;
     in
     {
@@ -117,6 +118,10 @@
           pkgs.nushell
           pkgs.sass
           pkgs.lightningcss
+          pkgs.javaPackages.compiler.temurin-bin.jdk-25 
+          pkgs.pulumi
+          pkgs.pulumiPackages.pulumi-java
+          pkgs.gradle
         ];
       };
     };
