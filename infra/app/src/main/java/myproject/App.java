@@ -27,9 +27,9 @@ public class App {
   }
 
   private static ResourceGroup resourceGroup() {
-    String name = "rg-" + APP_NAME + "-" + APP_REGION_PRIMARY.getSlug() + "-01";
+    String name = "rg-" + APP_NAME + "-" + APP_REGION_PRIMARY.slug() + "-01";
     ResourceGroupArgs args =
-        ResourceGroupArgs.builder().location(APP_REGION_PRIMARY.getName()).build();
+        ResourceGroupArgs.builder().location(APP_REGION_PRIMARY.name()).build();
     return new ResourceGroup(name, args);
   }
 
@@ -38,7 +38,7 @@ public class App {
         new RandomString(
             "random", RandomStringArgs.builder().length(8).special(false).upper(false).build());
 
-    String baseName = "sa" + APP_NAME + APP_REGION_PRIMARY.getSlug() + "01";
+    String baseName = "sa" + APP_NAME + APP_REGION_PRIMARY.slug() + "01";
 
     var name = Output.format("%s%s", baseName, random_id.result());
 
