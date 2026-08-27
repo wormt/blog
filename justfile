@@ -50,5 +50,14 @@ vm-ssh *args:
 tunnel local_port="8080" guest_port="80":
 	./scripts/tunnel-bridge.nu {{ local_port }} {{ guest_port }}
 
+pup:
+	cd infra && pulumi up -s {{ IMAGE_NAME }} -y
+
+pdown:
+	cd infra && pulumi down -s {{ IMAGE_NAME }} -y
+
+preset:
+	cd infra && pulumi destroy -s {{ IMAGE_NAME }} -y && pulumi stack rm -f -s {{ IMAGE_NAME }} -y
+
 rebuild: build vm
 	@echo "VM {{VM_NAME}} rebuilt"
