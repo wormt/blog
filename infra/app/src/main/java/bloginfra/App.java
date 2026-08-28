@@ -1,7 +1,7 @@
-package myproject;
+package bloginfra;
 
+import bloginfra.resources.*;
 import com.pulumi.Pulumi;
-import myproject.resources.*;
 
 public class App {
   public static final String APP_NAME = "blog";

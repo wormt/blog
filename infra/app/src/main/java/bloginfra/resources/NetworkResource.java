@@ -1,5 +1,6 @@
-package myproject.resources;
+package bloginfra.resources;
 
+import bloginfra.Region;
 import com.pulumi.Context;
 import com.pulumi.azurenative.network.*;
 import com.pulumi.azurenative.network.enums.IPAllocationMethod;
@@ -12,7 +13,6 @@ import com.pulumi.azurenative.network.inputs.SecurityRuleArgs;
 import com.pulumi.azurenative.resources.ResourceGroup;
 import com.pulumi.core.*;
 import java.util.List;
-import myproject.Region;
 
 public final class NetworkResource {
   public static final String APP_NAME = "blog";

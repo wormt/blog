@@ -1,10 +1,10 @@
-package myproject.resources;
+package bloginfra.resources;
 
+import bloginfra.Region;
 import com.pulumi.Context;
 import com.pulumi.azurenative.resources.ResourceGroup;
 import com.pulumi.azurenative.resources.ResourceGroupArgs;
 import com.pulumi.core.*;
-import myproject.Region;
 
 public final class ManagementResource {
   public static final String APP_NAME = "blog";

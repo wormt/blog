@@ -1,4 +1,4 @@
-package myproject;
+package bloginfra;
 
 public record Region(String name, String label, String slug) {
   public static final Region US_EAST = new Region("eastus", "East US", "eus");
