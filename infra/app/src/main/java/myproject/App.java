@@ -2,7 +2,6 @@ package myproject;
 
 import com.pulumi.Pulumi;
 import com.pulumi.azurenative.resources.ResourceGroup;
-import com.pulumi.azurenative.resources.ResourceGroupArgs;
 import com.pulumi.azurenative.storage.StorageAccount;
 import com.pulumi.azurenative.storage.StorageAccountArgs;
 import com.pulumi.azurenative.storage.enums.Kind;
@@ -11,6 +10,7 @@ import com.pulumi.azurenative.storage.inputs.SkuArgs;
 import com.pulumi.core.*;
 import com.pulumi.random.RandomString;
 import com.pulumi.random.RandomStringArgs;
+import myproject.resources.*;
 
 public class App {
   public static final String APP_NAME = "blog";
@@ -19,18 +19,11 @@ public class App {
   public static void main(String[] args) {
     Pulumi.run(
         ctx -> {
-          var resourceGroup = resourceGroup();
-          var storageAccount = storageAccount(resourceGroup);
+          var mgmt = new ManagementResource();
+          var network = new NetworkResource(mgmt.resourceGroup());
 
-          ctx.export("storageAccountName", storageAccount.name());
+          network.outputs().exportOutputs(ctx);
         });
-  }
-
-  private static ResourceGroup resourceGroup() {
-    String name = "rg-" + APP_NAME + "-" + APP_REGION_PRIMARY.slug() + "-01";
-    ResourceGroupArgs args =
-        ResourceGroupArgs.builder().location(APP_REGION_PRIMARY.name()).build();
-    return new ResourceGroup(name, args);
   }
 
   private static StorageAccount storageAccount(ResourceGroup rg) {
