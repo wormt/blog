@@ -1,5 +1,6 @@
 package myproject.resources;
 
+import com.pulumi.Context;
 import com.pulumi.azurenative.resources.ResourceGroup;
 import com.pulumi.azurenative.resources.ResourceGroupArgs;
 import com.pulumi.core.*;
@@ -11,7 +12,11 @@ public final class ManagementResource {
 
   private final ResourceGroup rg;
 
-  public record ManagementOutputs(Output<String> rgId) {}
+  public record ManagementOutputs(Output<String> rgId) {
+    public void exportOutputs(Context ctx) {
+      ctx.export("rgId", rgId);
+    }
+  }
 
   public ManagementResource() {
     String name = "rg-" + APP_NAME + "-" + APP_REGION_PRIMARY.slug() + "-01";
