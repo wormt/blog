@@ -1,13 +1,36 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
+let
+  blog = pkgs.runCommand "blog-www" {
+    __noChroot = true;
+    nativeBuildInputs = [
+      inputs.roc-overlay.packages.x86_64-linux.nightly
+      pkgs.sass
+      pkgs.lightningcss
+    ];
+  } ''
+    cp -r ${../../../../package} package
+    cp -r ${../../../../content} content
+
+    # nix's behavior when using nativeBuildInputs sets HOME to a directory
+    # that roc cant write to for its build cache.
+    export HOME="$PWD"
+    export ROC_CACHE_DIR="$HOME/roc-cache"
+    mkdir -p "$ROC_CACHE_DIR"
+
+    roc build package/Render.roc --output=render
+    sass --style=expanded --sourcemap=none package/styles/main.scss | lightningcss --minify -o site.css
+    ./render ./content/ ./www/
+    mkdir -p $out/var/www/blog
+    cp -r www/. $out/var/www/blog/
+    cp site.css $out/var/www/blog/site.css
+  '';
+in
 {
   environment.systemPackages = [ pkgs.nginx ];
 
   layeredImage.contents = [
-    (pkgs.runCommand "blog-www" { } ''
-      mkdir -p $out/var/www/blog
-      cp -r ${../../../../www}/. $out/var/www/blog/
-    '')
+    blog
   ];
 
   selinux.fileContexts = {
