@@ -5,7 +5,7 @@ let
     __noChroot = true;
     nativeBuildInputs = [
       inputs.roc-overlay.packages.x86_64-linux.nightly
-      pkgs.sass
+      pkgs.dart-sass
       pkgs.lightningcss
     ];
   } ''
@@ -19,7 +19,7 @@ let
     mkdir -p "$ROC_CACHE_DIR"
 
     roc build package/Render.roc --output=render
-    sass --style=expanded --sourcemap=none package/styles/main.scss | lightningcss --minify -o site.css
+    sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o site.css
     ./render ./content/ ./www/
     mkdir -p $out/var/www/blog
     cp -r www/. $out/var/www/blog/

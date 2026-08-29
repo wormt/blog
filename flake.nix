@@ -11,7 +11,7 @@
     let
       system = "x86_64-linux";
       pkgs = wormtpkgs.legacyPackages.${system};
-      sass = pkgs.sass;
+      sass = pkgs.dart-sass;
     in
     {
       apps.${system} = {
@@ -42,7 +42,7 @@
               ];
               text = ''
                 echo "[blog] processing CSS..."
-                sass --style=expanded --sourcemap=none package/styles/main.scss | lightningcss --minify -o www/site.css
+                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/site.css
               '';
             }
           }/bin/blog-css";
@@ -74,7 +74,7 @@
               ];
               text = ''
                 echo "[blog] processing CSS..."
-                sass --style=expanded --sourcemap=none package/styles/main.scss | lightningcss --minify -o www/site.css
+                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/site.css
                 echo "[blog] rendering HTML..."
                 exec ./render ./content/ ./www/
               '';
@@ -97,7 +97,7 @@
                 echo "[blog] building renderer..."
                 roc build package/Render.roc --output=render
                 echo "[blog] processing CSS..."
-                sass --style=expanded --sourcemap=none package/styles/main.scss | lightningcss --minify -o www/site.css
+                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/site.css
                 echo "[blog] rendering HTML..."
                 exec ./render ./content/ ./www/
               '';
@@ -116,7 +116,7 @@
           pkgs.just
           pkgs.just-lsp
           pkgs.nushell
-          pkgs.sass
+          sass
           pkgs.lightningcss
           pkgs.javaPackages.compiler.temurin-bin.jdk-25 
           pkgs.jdt-language-server
