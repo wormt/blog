@@ -44,5 +44,5 @@ Templates :: {}.{
 
 	html_footer : Str -> Str
 	html_footer = |heading|
-		"<nav><a href='/'>Home</a></nav>\n${heading}\n<footer>No one can be remembered</footer>\n</body>\n</html>"
+		"<nav><a href='/'>Home</a></nav>\n${heading}\n<footer><a href='https://github.com/wormt/blog'>[source]</a> | Web content licensed CC BY-SA 4.0 unless otherwise noted</footer>\n</body>\n</html>"
 }
