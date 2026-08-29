@@ -56,7 +56,7 @@ collect_metadata! = |pages| {
 
 render_index_page! : List(Templates.PostInfo), Path.Path => Try({}, [WriteError(Str), ..])
 render_index_page! = |posts, output_dir| {
-    output_path = Path.from_os_str(OsStr.from_str("index.html"))
+    output_path = Path.join(Path.unix("posts"), "index.html")
     SSG.write_file!({
         output_dir: output_dir,
         output_path: output_path,
@@ -64,9 +64,20 @@ render_index_page! = |posts, output_dir| {
     })
 }
 
+render_home_page! : List(Templates.PostInfo), Path.Path => Try({}, [WriteError(Str), ..])
+render_home_page! = |posts, output_dir| {
+    output_path = Path.from_os_str(OsStr.from_str("index.html"))
+    SSG.write_file!({
+        output_dir: output_dir,
+        output_path: output_path,
+        content: Templates.html_home_page(posts),
+    })
+}
+
 render_all! : List(SSG.Page), Path.Path => Try({}, [ReadError(Str), ParseError(Str), WriteError(Str), ..])
 render_all! = |pages, output_dir| {
     metadata = collect_metadata!(pages)?
+    render_home_page!(List.take_first(metadata, 5), output_dir)?
     render_index_page!(metadata, output_dir)?
     render_individual_pages!(pages, output_dir)
 }
