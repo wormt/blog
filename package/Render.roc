@@ -24,9 +24,8 @@ render_page! = |page, output_dir| {
     }
     output_path = Path.join(Path.unix("posts"), filename_str)
 
-    page_html = Templates.html_head(fm.title, meta_desc, tags_list)
+    page_html = Templates.html_head(fm.title, meta_desc)
         .concat(Templates.html_article(fm.title, fm.date, tags_list, body_html))
-        .concat(Templates.html_footer(""))
 
     SSG.write_file!({
         output_dir: output_dir,
