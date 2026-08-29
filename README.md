@@ -12,3 +12,8 @@ you are able to do these kinds of shenanigans with.
 
 I will then deploy this to a free azure vm using pulumi's java sdk for
 a maximally cursed setup. hopefully this works lmao
+
+## TODO
+
+- make html rendering less caveman brained
+- actually set up deployment of bootc image for real
