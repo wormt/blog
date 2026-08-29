@@ -1,0 +1,15 @@
+$syntax-colors: (
+  keyword: var(--color-error),
+  storage: var(--color-accent-purple),
+  variable: var(--color-link),
+  string: var(--color-accent-green),
+  constant: var(--color-warning),
+  entity: var(--color-accent-cyan),
+  support: var(--color-accent-cyan),
+  punctuation: var(--color-text-muted),
+  comment: #5a5a72,
+);
+
+@each $name, $color in $syntax-colors {
+  .#{$name} { color: $color; }
+}

@@ -19,11 +19,15 @@ let
     mkdir -p "$ROC_CACHE_DIR"
 
     roc build package/Render.roc --output=render
-    sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o site.css
+    mkdir -p css
+    sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o css/site.css
     ./render ./content/ ./www/
+    for f in article base home; do
+      sass --style=expanded --no-source-map package/styles/$f.scss | lightningcss --minify -o css/$f.css
+    done
     mkdir -p $out/var/www/blog
     cp -r www/. $out/var/www/blog/
-    cp site.css $out/var/www/blog/site.css
+    cp -r css $out/var/www/blog/css
   '';
 in
 {

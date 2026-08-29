@@ -42,7 +42,10 @@
               ];
               text = ''
                 echo "[blog] processing CSS..."
-                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/site.css
+                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/css/site.css
+                for f in article base home; do
+                  sass --style=expanded --no-source-map package/styles/$f.scss | lightningcss --minify -o www/css/$f.css
+                done
               '';
             }
           }/bin/blog-css";
@@ -74,7 +77,10 @@
               ];
               text = ''
                 echo "[blog] processing CSS..."
-                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/site.css
+                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/css/site.css
+                for f in article base home; do
+                  sass --style=expanded --no-source-map package/styles/$f.scss | lightningcss --minify -o www/css/$f.css
+                done
                 echo "[blog] rendering HTML..."
                 exec ./render ./content/ ./www/
               '';
@@ -97,7 +103,10 @@
                 echo "[blog] building renderer..."
                 roc build package/Render.roc --output=render
                 echo "[blog] processing CSS..."
-                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/site.css
+                sass --style=expanded --no-source-map package/styles/main.scss | lightningcss --minify -o www/css/site.css
+                for f in article base home; do
+                  sass --style=expanded --no-source-map package/styles/$f.scss | lightningcss --minify -o www/css/$f.css
+                done
                 echo "[blog] rendering HTML..."
                 exec ./render ./content/ ./www/
               '';
