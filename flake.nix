@@ -122,6 +122,7 @@
           pkgs.nixfmt
           pkgs.opentofu
           pkgs.tofu-ls
+          pkgs.yamllint
           pkgs.just
           pkgs.just-lsp
           pkgs.nushell

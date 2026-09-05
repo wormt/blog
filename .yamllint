@@ -1,0 +1,30 @@
+---
+extends: 'default'
+
+locale: 'en_US.UTF-8'
+
+rules:
+  line-length:
+    max: 80
+    level: 'warning'
+  braces:
+    max-spaces-inside: 1
+    max-spaces-inside-empty: 1
+    min-spaces-inside-empty: 0
+  brackets:
+    max-spaces-inside: -1
+    max-spaces-inside-empty: 0
+    min-spaces-inside: 1
+    min-spaces-inside-empty: 0
+  comments:
+    min-spaces-from-content: 1
+  comments-indentation: false
+  indentation:
+    check-multi-line-strings: false
+    spaces: 2
+  octal-values:
+    forbid-explicit-octal: true
+    forbid-implicit-octal: true
+  quoted-strings:
+    quote-type: 'double'
+  truthy: false
