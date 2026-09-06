@@ -7,12 +7,13 @@
     system.stateVersion = "26.05";
 
     layeredImage = {
-      name = "ghcr.io/wormt/edge";
+      name = "ghcr.io/wormt/blog";
       tag = "latest";
+      config.Labels."org.opencontainers.image.source" = "https://github.com/wormt/blog";
       fromImage = pkgs.dockerTools.pullImage {
         imageName = "quay.io/fedora/fedora-bootc";
-        imageDigest = "sha256:7b7db1d22fe0291fa7e05bc6aeece054b51be5f4857a8ecdb1e69cd368e129d6"; # registry hash
-        sha256 = "sha256-T5ti61b611T3b7/2gD3bfDygIGcP0V2jZYSiKtkwOug=";                          # nix store hash
+        imageDigest = "sha256:cc0e99fb83e3cf2bd34b073535cfa656dc817dfd29911a1c47546bb013e1c845"; # registry hash
+        sha256 = "sha256-k2ddp1m1FoazicUCa7E8cKmrRlayn6zZPQcjE8qNMjA";                          # nix store hash
         finalImageTag = "44";
         arch = "amd64";
       };

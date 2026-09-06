@@ -1,0 +1,59 @@
+---
+name: "build-image"
+
+"on":
+  push:
+    branches:
+      - "main"
+      - "testing-actions"
+    paths:
+      - "nix/**"
+      - "package/**"
+      - "justfile"
+      - ".github/workflows/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: "read"
+  packages: "write"
+
+jobs:
+  build-and-push:
+    runs-on: "ubuntu-latest"
+    container:
+      image: "cgr.dev/chainguard/wolfi-base@sha256:918a593b8268c222afd4e2c4f06860ac984e60719b4697e4c71d796bc8fcd042" # yamllint disable-line rule:line-length
+    env:
+      NIX_CONFIG: "sandbox = false"
+    steps:
+      - name: "Install runner dependencies"
+        run: |
+          apk add --no-cache \
+            git \
+            skopeo \
+            xz \
+            libstdc++ \
+            libarchive-tools \
+            zstd
+          ln -sf /usr/bin/bsdtar /usr/bin/tar
+
+      - name: "Checkout"
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+
+      - name: "Install Nix"
+        uses: "DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25" # yamllint disable-line rule:line-length
+
+      - name: "Build OCI image"
+        run: |
+          chown -R root:root "$GITHUB_WORKSPACE"
+          nix build \
+            ./nix#caligaConfigurations.x86_64-linux.edge.config.build.image
+          ./result > /tmp/image.tar
+
+      - name: "Push to ghcr.io"
+        env:
+          GHCR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GHCR_USER: "${{ github.actor }}"
+        run: |
+          skopeo copy --dest-creds "$GHCR_USER:$GHCR_TOKEN" \
+            docker-archive:/tmp/image.tar \
+            docker://ghcr.io/wormt/blog:latest
