@@ -44,6 +44,7 @@ jobs:
 
       - name: "Build OCI image"
         run: |
+          chown -R root:root "$GITHUB_WORKSPACE"
           nix build \
             ./nix#caligaConfigurations.x86_64-linux.edge.config.build.image
           ./result > /tmp/image.tar
