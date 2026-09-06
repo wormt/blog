@@ -1,0 +1,46 @@
+---
+name: "build-image"
+
+"on":
+  push:
+    branches:
+      - "main"
+      - "testing-actions"
+    paths:
+      - "nix/**"
+      - "package/**"
+      - "justfile"
+      - ".github/workflows/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: "read"
+  packages: "write"
+
+jobs:
+  build-and-push:
+    runs-on: "ubuntu-latest"
+    container:
+      image: "nixos/nix:2.35.2-amd64@sha256:617d914dba5384bf75adf17081583b69371031ec7defce36c34c5fa14fc819b0" # yamllint disable-line rule:line-length
+    env:
+      NIX_CONFIG: "sandbox = false"
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+
+      - name: "Enable magic-nix-cache"
+        uses: "DeterminateSystems/magic-nix-cache-action@908b263ff629f4cc17666315b7fd3ec127c6244d" # yamllint disable-line rule:line-length
+
+      - name: "Build OCI image"
+        run: |
+          nix build ./nix#caligaConfigurations.x86_64-linux.edge.config.build.image \
+          && ./result > /tmp/image.tar
+
+      - name: "Push to ghcr.io"
+        env:
+          GHCR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          GHCR_USER: "${{ github.actor }}"
+        run: |
+          skopeo copy --dest-creds "$GHCR_USER:$GHCR_TOKEN" \
+            docker-archive:/tmp/image.tar \
+            docker://ghcr.io/wormt/edge:latest
