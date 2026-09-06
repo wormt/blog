@@ -5,7 +5,6 @@ name: "build-image"
   push:
     branches:
       - "main"
-      - "testing-actions"
     paths:
       - "nix/**"
       - "package/**"
