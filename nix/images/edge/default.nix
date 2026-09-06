@@ -19,6 +19,9 @@
       };
     };
 
-    environment.systemPackages = [ pkgs.nginx pkgs.sbcl ];
+    environment.systemPackages = [
+      pkgs.nginx
+      pkgs.racket
+    ];
   };
 }

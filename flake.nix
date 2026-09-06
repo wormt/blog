@@ -120,7 +120,7 @@
           roc-overlay.packages.${system}.nightly
           pkgs.nixd
           pkgs.nixfmt
-          pkgs.sbcl
+          pkgs.racket
           pkgs.opentofu
           pkgs.tofu-ls
           pkgs.yamllint
@@ -143,6 +143,7 @@
 
         shellHook = ''
           export LOMBOK_PATH="${pkgs.lombok}/share/java/lombok.jar"
+          raco pkg install --auto --skip-installed --user racket-langserver
         '';
       };
     };
