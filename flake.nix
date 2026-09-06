@@ -120,6 +120,7 @@
           roc-overlay.packages.${system}.nightly
           pkgs.nixd
           pkgs.nixfmt
+          pkgs.sbcl
           pkgs.opentofu
           pkgs.tofu-ls
           pkgs.yamllint

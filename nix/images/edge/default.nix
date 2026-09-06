@@ -19,6 +19,6 @@
       };
     };
 
-    environment.systemPackages = [ pkgs.nginx ];
+    environment.systemPackages = [ pkgs.nginx pkgs.sbcl ];
   };
 }
