@@ -29,8 +29,6 @@ jobs:
         run: |
           apk add --no-cache \
             git \
-            bash \
-            curl \
             skopeo \
             xz \
             libstdc++ \
@@ -43,9 +41,6 @@ jobs:
 
       - name: "Install Nix"
         uses: "DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25" # yamllint disable-line rule:line-length
-
-      - name: "Enable magic-nix-cache"
-        uses: "DeterminateSystems/magic-nix-cache-action@908b263ff629f4cc17666315b7fd3ec127c6244d" # yamllint disable-line rule:line-length
 
       - name: "Build OCI image"
         run: |
