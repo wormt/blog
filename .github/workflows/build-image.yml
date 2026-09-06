@@ -26,7 +26,17 @@ jobs:
       NIX_CONFIG: "sandbox = false"
     steps:
       - name: "Install runner dependencies"
-        run: "apk add --no-cache git bash curl skopeo xz libstdc++"
+        run: |
+          apk add --no-cache \
+            git \
+            bash \
+            curl \
+            skopeo \
+            xz \
+            libstdc++ \
+            libarchive-tools \
+            zstd
+          ln -sf /usr/bin/bsdtar /usr/bin/tar
 
       - name: "Checkout"
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
