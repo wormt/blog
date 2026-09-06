@@ -21,12 +21,12 @@ jobs:
   build-and-push:
     runs-on: "ubuntu-latest"
     container:
-      image: "docker.io/chainguard/wolfi-base@sha256:918a593b8268c222afd4e2c4f06860ac984e60719b4697e4c71d796bc8fcd042" # yamllint disable-line rule:line-length
+      image: "cgr.dev/chainguard/wolfi-base@sha256:80acfa73fe895c911f4c4d9a69f3767f61e345bc8ac896c05ae2ea832c0d2754" # yamllint disable-line rule:line-length
     env:
       NIX_CONFIG: "sandbox = false"
     steps:
       - name: "Install runner dependencies"
-        run: "apk add --no-cache git bash curl skopeo xz"
+        run: "apk add --no-cache git bash curl skopeo xz libstdc++"
 
       - name: "Checkout"
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
