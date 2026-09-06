@@ -21,20 +21,27 @@ jobs:
   build-and-push:
     runs-on: "ubuntu-latest"
     container:
-      image: "nixos/nix:2.35.2-amd64@sha256:617d914dba5384bf75adf17081583b69371031ec7defce36c34c5fa14fc819b0" # yamllint disable-line rule:line-length
+      image: "docker.io/chainguard/wolfi-base@sha256:918a593b8268c222afd4e2c4f06860ac984e60719b4697e4c71d796bc8fcd042" # yamllint disable-line rule:line-length
     env:
       NIX_CONFIG: "sandbox = false"
     steps:
+      - name: "Install runner dependencies"
+        run: "apk add --no-cache git bash curl skopeo xz"
+
       - name: "Checkout"
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1"
+
+      - name: "Install Nix"
+        uses: "DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25" # yamllint disable-line rule:line-length
 
       - name: "Enable magic-nix-cache"
         uses: "DeterminateSystems/magic-nix-cache-action@908b263ff629f4cc17666315b7fd3ec127c6244d" # yamllint disable-line rule:line-length
 
       - name: "Build OCI image"
         run: |
-          nix build ./nix#caligaConfigurations.x86_64-linux.edge.config.build.image \
-          && ./result > /tmp/image.tar
+          nix build \
+            ./nix#caligaConfigurations.x86_64-linux.edge.config.build.image
+          ./result > /tmp/image.tar
 
       - name: "Push to ghcr.io"
         env:
