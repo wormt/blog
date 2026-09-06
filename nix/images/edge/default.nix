@@ -7,7 +7,7 @@
     system.stateVersion = "26.05";
 
     layeredImage = {
-      name = "ghcr.io/wormt/edge";
+      name = "ghcr.io/wormt/blog";
       tag = "latest";
       config.Labels."org.opencontainers.image.source" = "https://github.com/wormt/blog";
       fromImage = pkgs.dockerTools.pullImage {

@@ -56,4 +56,4 @@ jobs:
         run: |
           skopeo copy --dest-creds "$GHCR_USER:$GHCR_TOKEN" \
             docker-archive:/tmp/image.tar \
-            docker://ghcr.io/wormt/edge:latest
+            docker://ghcr.io/wormt/blog:latest
