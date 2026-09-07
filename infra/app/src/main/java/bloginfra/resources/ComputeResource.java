@@ -2,20 +2,20 @@ package bloginfra.resources;
 
 import bloginfra.Region;
 import com.pulumi.Context;
-import com.pulumi.azurenative.batch.inputs.ImageReferenceArgs;
-import com.pulumi.azurenative.batch.inputs.OSDiskArgs;
 import com.pulumi.azurenative.compute.*;
 import com.pulumi.azurenative.compute.enums.*;
-import com.pulumi.azurenative.compute.inputs.BootDiagnosticsArgs;
-import com.pulumi.azurenative.compute.inputs.DiagnosticsProfileArgs;
+import com.pulumi.azurenative.compute.inputs.HardwareProfileArgs;
+import com.pulumi.azurenative.compute.inputs.ImageReferenceArgs;
+import com.pulumi.azurenative.compute.inputs.LinuxConfigurationArgs;
+import com.pulumi.azurenative.compute.inputs.ManagedDiskParametersArgs;
 import com.pulumi.azurenative.compute.inputs.NetworkInterfaceReferenceArgs;
 import com.pulumi.azurenative.compute.inputs.NetworkProfileArgs;
+import com.pulumi.azurenative.compute.inputs.OSDiskArgs;
+import com.pulumi.azurenative.compute.inputs.OSProfileArgs;
+import com.pulumi.azurenative.compute.inputs.SshConfigurationArgs;
+import com.pulumi.azurenative.compute.inputs.SshPublicKeyArgs;
 import com.pulumi.azurenative.compute.inputs.StorageProfileArgs;
-import com.pulumi.azurenative.connectedvmwarevsphere.inputs.*;
-import com.pulumi.azurenative.hybridnetwork.inputs.*;
-import com.pulumi.azurenative.network.*;
 import com.pulumi.azurenative.resources.ResourceGroup;
-import com.pulumi.azurenative.workloads.inputs.OSProfileArgs;
 import com.pulumi.core.*;
 import java.util.List;
 
@@ -38,15 +38,13 @@ public final class ComputeResource {
         new VirtualMachine(
             "vm-" + baseName + "-01",
             VirtualMachineArgs.builder()
-                .resourceGroupName(rgName)
+                .resourceGroupName(rg.name())
                 .location(APP_REGION_PRIMARY.name())
-                .vmSize("Standard_D2s_v5")
-                .hardwareProfile(HardwareProfileArgs.builder().vmSize("Standard_D2s_v5").build())
+                .hardwareProfile(HardwareProfileArgs.builder().vmSize("Standard_B2ats_v2").build())
                 .osProfile(
                     OSProfileArgs.builder()
                         .computerName("edge-" + baseName + "-01")
                         .adminUsername("asv")
-                        .customData(cloudInit)
                         .linuxConfiguration(
                             LinuxConfigurationArgs.builder()
                                 .disablePasswordAuthentication(true)
@@ -56,7 +54,10 @@ public final class ComputeResource {
                                             List.of(
                                                 SshPublicKeyArgs.builder()
                                                     .path("/home/asv/.ssh/authorized_keys")
-                                                    .keyData("<your public key>")
+                                                    .keyData(
+                                                        "ssh-ed25519"
+                                                            + " AAAAC3NzaC1lZDI1NTE5AAAAIOD62U1wf9DrvjWde2jV8rbi9DVThvZZyPleZVBIf5j4"
+                                                            + " navi_blog")
                                                     .build()))
                                         .build())
                                 .build())
@@ -73,9 +74,12 @@ public final class ComputeResource {
                         .osDisk(
                             OSDiskArgs.builder()
                                 .name("osdisk-" + baseName + "-01")
-                                .createOption(DiskCreateOption.FromImage)
-                                .diskSizeGB(40)
-                                .storageAccountType(StorageAccountTypes.Standard_LRS)
+                                .createOption(DiskCreateOptionTypes.FromImage)
+                                .diskSizeGB(64)
+                                .managedDisk(
+                                    ManagedDiskParametersArgs.builder()
+                                        .storageAccountType(StorageAccountTypes.Premium_LRS)
+                                        .build())
                                 .build())
                         .build())
                 .networkProfile(
@@ -86,10 +90,6 @@ public final class ComputeResource {
                                     .id(nicId)
                                     .primary(true)
                                     .build()))
-                        .build())
-                .diagnosticsProfile(
-                    DiagnosticsProfileArgs.builder()
-                        .bootDiagnostics(BootDiagnosticsArgs.builder().enabled(true).build())
                         .build())
                 .build());
   }
