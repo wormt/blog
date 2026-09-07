@@ -1,5 +1,17 @@
 { pkgs, ... }:
 
+let
+  acme-tiny = pkgs.fetchurl {
+    url = "https://raw.githubusercontent.com/diafygi/acme-tiny/refs/tags/5.0.3/acme_tiny.py";
+    sha256 = "sha256-uvNs3RSl0gaHX2VlOTJOTD7QmI0nmegDB6djLNHIT54=";
+  };
+  acme-tiny-bin = pkgs.runCommand "acme-tiny" { } ''
+    install -Dm755 ${acme-tiny} $out/usr/local/bin/acme_tiny
+  '';
+  acme-racket = pkgs.runCommand "acme-racket" { } ''
+    install -Dm755 ${../../../scripts/acme.rkt} $out/usr/local/libexec/acme.rkt
+  '';
+in
 {
   config = {
     caliga.os = "fedora";
@@ -21,7 +33,8 @@
 
     environment.systemPackages = [
       pkgs.nginx
-      pkgs.racket
+      pkgs.racket-minimal
     ];
+    layeredImage.contents = [ acme-tiny-bin acme-racket ];
   };
 }
