@@ -1,0 +1,122 @@
+[project]
+name = "vhd"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "osbuild>=193",
+]
+
+[tool.uv.sources]
+osbuild = { url = "https://github.com/osbuild/osbuild/archive/05d245c8e9a4615bc05b9bbcd79324625d24cfbc.tar.gz" }
+
+[tool.uv.extra-build-dependencies]
+osbuild = ["setuptools"]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.16",
+    "ty>=0.0.46",
+]
+
+[tool.ruff]
+target-version = "py314"
+line-length = 80
+preview = true
+
+[tool.ruff.lint]
+select = [
+    "E",     # pycodestyle errors
+    "W",     # pycodestyle warnings
+    "F",     # Pyflakes
+    "B",     # flake8-bugbear
+    "SIM",   # flake8-simplify
+    "TRY",   # tryceratops
+    "PIE",   # flake8-pie
+    "A",     # flake8-builtins
+    "ARG",   # flake8-unused-arguments
+    "ERA",   # eradicate
+    "BLE",   # flake8-blind-except
+    "RUF",   # Ruff-specific rules
+    "ASYNC", # flake8-async
+    "UP",    # pyupgrade
+    "FA",    # flake8-future-annotations
+    "FURB",  # refurb
+    "PERF",  # perflint
+    "I",     # isort
+    "N",     # pep8-naming
+    "ICN",   # flake8-import-conventions
+    "TID",   # flake8-tidy-imports
+    "INP",   # flake8-no-pep420
+    "TCH",   # flake8-type-checking
+    "ANN",   # flake8-annotations
+    "C4",    # flake8-comprehensions
+    "ISC",   # flake8-implicit-str-concat
+    "RET",   # flake8-return
+    "SLF",   # flake8-self
+    "YTT",   # flake8-2020
+    "PTH",   # flake8-use-pathlib
+    "T20",   # flake8-print
+    "LOG",   # flake8-logging
+    "G",     # flake8-logging-format
+    "S",     # flake8-bandit
+    "DOC",   # pydoclint
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.isort]
+known-first-party = ["vhd"]
+
+[tool.ruff.format]
+quote-style                = "single"
+indent-style               = "space"
+skip-magic-trailing-comma  = false
+line-ending                = "auto"
+docstring-code-format      = true
+docstring-code-line-length = "dynamic"
+
+[tool.ty]
+[tool.ty.analysis]
+respect-type-ignore-comments = true
+
+[tool.ty.rules]
+invalid-await                 = "error"
+unused-awaitable              = "error"
+unresolved-reference          = "error"
+unresolved-import             = "error"
+possibly-unresolved-reference = "error"
+possibly-missing-import       = "error"
+possibly-missing-attribute    = "error"
+call-non-callable             = "error"
+invalid-return-type           = "error"
+invalid-assignment            = "error"
+missing-argument              = "error"
+empty-body                    = "error"
+conflicting-declarations      = "error"
+duplicate-base                = "error"
+cyclic-class-definition       = "error"
+dataclass-field-order         = "error"
+final-without-value           = "error"
+final-on-non-method           = "error"
+invalid-type-form             = "error"
+unsupported-operator          = "error"
+subclass-of-final-class       = "error"
+invalid-method-override       = "error"
+invalid-metaclass             = "error"
+invalid-base                  = "error"
+conflicting-metaclass         = "error"
+inconsistent-mro              = "error"
+duplicate-kw-only             = "error"
+invalid-exception-caught      = "error"
+invalid-raise                 = "error"
+invalid-argument-type         = "error"
+invalid-attribute-access      = "error"
+invalid-attribute-override    = "error"
+instance-layout-conflict      = "error"
+deprecated                    = "warn"
+unused-ignore-comment         = "warn"
+redundant-cast                = "warn"
+division-by-zero              = "warn"
+index-out-of-bounds           = "warn"
+ignore-comment-unknown-rule   = "warn"

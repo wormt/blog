@@ -4,17 +4,70 @@
     wormtpkgs.url = "github:wormt/nixpkgs";
     roc-overlay.url = "github:roc-lang/roc-overlay";
     roc-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    pyproject-nix = {
+      url = "github:pyproject-nix/pyproject.nix";
+      inputs.nixpkgs.follows = "wormtpkgs";
+    };
+    uv2nix = {
+      url = "github:pyproject-nix/uv2nix";
+      inputs.nixpkgs.follows = "wormtpkgs";
+      inputs.pyproject-nix.follows = "pyproject-nix";
+    };
+    pyproject-build-systems = {
+      url = "github:pyproject-nix/build-system-pkgs";
+      inputs.nixpkgs.follows = "wormtpkgs";
+      inputs.pyproject-nix.follows = "pyproject-nix";
+      inputs.uv2nix.follows = "uv2nix";
+    };
   };
 
   outputs =
-    { wormtpkgs, roc-overlay, ... }:
+    {
+      wormtpkgs,
+      roc-overlay,
+      pyproject-nix,
+      uv2nix,
+      pyproject-build-systems,
+      ...
+    }:
     let
       system = "x86_64-linux";
       pkgs = wormtpkgs.legacyPackages.${system};
+
       sass = pkgs.dart-sass;
+
+      vhdWorkspace = uv2nix.lib.workspace.loadWorkspace {
+        workspaceRoot = ./scripts/vhd;
+      };
+      vhdPythonBase = pkgs.callPackage pyproject-nix.build.packages {
+        python = pkgs.python314;
+      };
+      vhdPython = vhdPythonBase.overrideScope (
+        pkgs.lib.composeManyExtensions [
+          pyproject-build-systems.overlays.wheel
+          (vhdWorkspace.mkPyprojectOverlay {
+            sourcePreference = "wheel";
+          })
+        ]
+      );
+      vhdEnv = vhdPython.mkVirtualEnv "vhd-env" vhdWorkspace.deps.default;
+      vhdDevEnv = vhdPython.mkVirtualEnv "vhd-dev-env" vhdWorkspace.deps.all;
     in
     {
       apps.${system} = {
+        vhd = {
+          type = "app";
+          program = "${
+            pkgs.writeShellApplication {
+              name = "vhd";
+              runtimeInputs = [ vhdEnv ];
+              text = ''
+                exec python ${./scripts/vhd/vhd.py}
+              '';
+            }
+          }/bin/vhd";
+        };
+
         build = {
           type = "app";
           program = "${
@@ -129,7 +182,7 @@
           pkgs.nushell
           sass
           pkgs.lightningcss
-          pkgs.javaPackages.compiler.temurin-bin.jdk-25 
+          pkgs.javaPackages.compiler.temurin-bin.jdk-25
           pkgs.jdt-language-server
           pkgs.lombok
           pkgs.azure-cli
@@ -139,6 +192,8 @@
           pkgs.pulumiPackages.pulumi-random
           pkgs.google-java-format
           pkgs.gradle
+          pkgs.uv
+          vhdDevEnv
         ];
 
         shellHook = ''
