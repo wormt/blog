@@ -27,7 +27,7 @@ in
         (pkgs.dockerTools.pullImage {
           imageName = "quay.io/fedora/fedora-bootc";
           imageDigest = "sha256:d4b9c5e156ab0a119962aad27c5394409094cc24348846a35c78acd8e9847a4d"; # registry hash
-          sha256 = "sha256-1un+fQxPLYYvPsya9RQ8MuN3XcEhe4/lxTeIRXGoGQ0="; # nix store hash
+          sha256 = "sha256-Mo4ieJqgBAW4DxRxR6ePSgu1mc6VXHC7RHYy/4EX418="; # nix store hash
           finalImageTag = "44";
           arch = "amd64";
         }).overrideAttrs
