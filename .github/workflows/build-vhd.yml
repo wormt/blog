@@ -21,7 +21,7 @@ jobs:
     timeout-minutes: 90
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@11d5960a326750d5838078e36cf38b85af677262" # yamllint disable-line rule:line-length
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # yamllint disable-line rule:line-length
         with:
           persist-credentials: false
 
@@ -35,17 +35,13 @@ jobs:
 
           sudo install -d -o "$USER" -g "$(id -gn)" -m 0700 \
             /mnt/blog-vhd \
-            /mnt/blog-vhd/nix-builds \
             /mnt/blog-vhd/tmp
 
           echo "VHD_OUTPUT=/mnt/blog-vhd/image.vhd" >> "$GITHUB_ENV"
           echo "VHD_TMPDIR=/mnt/blog-vhd/tmp" >> "$GITHUB_ENV"
 
       - name: "Install Nix"
-        uses: "DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a" # yamllint disable-line rule:line-length
-        with:
-          extra-conf: |
-            build-dir = /mnt/blog-vhd/nix-builds
+        uses: "DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25" # yamllint disable-line rule:line-length
 
       - name: "Build VHD"
         shell: "bash"
@@ -62,7 +58,7 @@ jobs:
         uses: "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02" # yamllint disable-line rule:line-length
         with:
           name: "blog-vhd-${{ github.sha }}"
-          path: /mnt/blog-vhd/image.vhd
+          path: "/mnt/blog-vhd/image.vhd"
           if-no-files-found: "error"
           compression-level: 1
           retention-days: 7
