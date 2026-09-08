@@ -11,17 +11,12 @@ let
   acme-racket = pkgs.runCommand "acme-racket" { } ''
     install -Dm755 ${../../../scripts/acme.rkt} $out/usr/local/libexec/acme.rkt
   '';
-  ostree-prepare-root = pkgs.writeTextDir "usr/lib/ostree/prepare-root.conf" ''
-    [composefs]
-    enabled = yes
-    [sysroot]
-    readonly = true
-  '';
 in
 {
   config = {
     caliga.os = "fedora";
     caliga.core.enable = true;
+    bootc.ostree-prepare-root.createConf = true;
     system.stateVersion = "26.05";
 
     layeredImage = {
@@ -48,7 +43,6 @@ in
     layeredImage.contents = [
       acme-tiny-bin
       acme-racket
-      ostree-prepare-root
     ];
   };
 }
