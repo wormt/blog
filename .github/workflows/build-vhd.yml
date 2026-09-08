@@ -6,6 +6,12 @@ name: "build-vhd"
     branches:
       - "main"
       - "testing-actions"
+    paths:
+      - ".github/workflows/build-vhd.yml"
+      - "flake.lock"
+      - "flake.nix"
+      - "nix/**"
+      - "scripts/vhd/**"
   workflow_dispatch: {}
 
 permissions:
