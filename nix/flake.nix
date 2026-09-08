@@ -9,10 +9,13 @@
     roc-overlay.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs: {
-    caligaConfigurations.x86_64-linux = {
+  outputs =
+    inputs:
+    let
+      system = "x86_64-linux";
+      pkgs = inputs.nixpkgs.legacyPackages.${system};
       edge = inputs.nix-caliga.lib.makeCaligaConfigurations {
-        pkgs = inputs.nixpkgs.legacyPackages.x86_64-linux;
+        inherit pkgs;
         specialArgs = { inherit inputs; };
         modules = [
           ./images/edge
@@ -20,6 +23,16 @@
           ./images/edge/services
         ];
       };
+      imageTar = pkgs.runCommand "blog-image.tar" { } ''
+        mkdir -p "$out"
+        ${edge.config.build.image} > "$out/image.tar"
+      '';
+    in
+    {
+      caligaConfigurations.${system}.edge = edge;
+      packages.${system} = {
+        default = imageTar;
+        inherit imageTar;
+      };
     };
-  };
 }

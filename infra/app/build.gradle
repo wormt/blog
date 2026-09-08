@@ -13,6 +13,7 @@ repositories {
 dependencies {
     implementation 'com.pulumi:pulumi:[1.3,2.0)'
     implementation 'com.pulumi:azure-native:2.13.0'
+    implementation 'com.pulumi:azure:6.40.0'
     implementation 'com.pulumi:random:4.14.0'
 }
 
@@ -20,4 +21,8 @@ application {
     mainClass = project.hasProperty("mainClass")
             ? project.getProperty("mainClass")
             : 'bloginfra.App'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:deprecation']
 }

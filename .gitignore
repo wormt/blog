@@ -15,6 +15,7 @@ test_path
 # nix
 *.qcow2
 *.tar
+*.vhd
 result
 
 # pulumi

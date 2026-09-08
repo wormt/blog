@@ -19,6 +19,11 @@
       inputs.pyproject-nix.follows = "pyproject-nix";
       inputs.uv2nix.follows = "uv2nix";
     };
+    nix-image.url = "path:./nix";
+    osbuild-src = {
+      url = "github:osbuild/osbuild/05d245c8e9a4615bc05b9bbcd79324625d24cfbc";
+      flake = false;
+    };
   };
 
   outputs =
@@ -28,6 +33,8 @@
       pyproject-nix,
       uv2nix,
       pyproject-build-systems,
+      nix-image,
+      osbuild-src,
       ...
     }:
     let
@@ -52,20 +59,76 @@
       );
       vhdEnv = vhdPython.mkVirtualEnv "vhd-env" vhdWorkspace.deps.default;
       vhdDevEnv = vhdPython.mkVirtualEnv "vhd-dev-env" vhdWorkspace.deps.all;
+      osbuildModules = pkgs.runCommand "osbuild-modules-193" { nativeBuildInputs = [ vhdEnv ]; } ''
+        mkdir -p "$out"
+        cp -R \
+          ${osbuild-src}/devices \
+          ${osbuild-src}/inputs \
+          ${osbuild-src}/mounts \
+          ${osbuild-src}/osbuild \
+          ${osbuild-src}/runners \
+          ${osbuild-src}/schemas \
+          ${osbuild-src}/sources \
+          ${osbuild-src}/stages \
+          "$out/"
+        chmod -R u+w "$out"
+        patchShebangs "$out"
+        substituteInPlace "$out/osbuild/buildroot.py" \
+          --replace-fail \
+            '        mounts = []' \
+            '        mounts = ["--dir", "/nix", "--ro-bind", "/nix/store", "/nix/store"]' \
+          --replace-fail \
+            '            "PATH": "/usr/sbin:/usr/bin",' \
+            '            "PATH": os.getenv("PATH", "/usr/sbin:/usr/bin"),'
+
+        test -f "$out/osbuild/__init__.py"
+        grep -Fq -- '"--ro-bind", "/nix/store", "/nix/store"' "$out/osbuild/buildroot.py"
+        grep -Fq -- '"PATH": os.getenv("PATH"' "$out/osbuild/buildroot.py"
+      '';
+      vhdRuntimeInputs = [
+        vhdEnv
+        pkgs.bootc
+        pkgs.bubblewrap
+        pkgs.coreutils
+        pkgs.curl
+        pkgs.e2fsprogs
+        pkgs.qemu-utils
+        pkgs.skopeo
+        pkgs.util-linux
+      ];
+      imageTar = nix-image.packages.${system}.imageTar;
+      vhd = pkgs.writeShellApplication {
+        name = "blog-vhd";
+        runtimeInputs = vhdRuntimeInputs;
+        text = ''
+          if (( EUID != 0 )); then
+            echo "blog-vhd must run as root because osbuild needs loop devices and mount privileges" >&2
+            exit 1
+          fi
+          if (( $# != 1 )); then
+            echo "usage: blog-vhd OUTPUT.vhd" >&2
+            exit 2
+          fi
+
+          export PYTHONPATH=${osbuildModules}''${PYTHONPATH:+:$PYTHONPATH}
+          exec python ${./scripts/vhd/vhd.py} \
+            --libdir ${osbuildModules} \
+            --skopeo ${pkgs.skopeo}/bin/skopeo \
+            ${imageTar}/image.tar \
+            "$1"
+        '';
+      };
     in
     {
+      packages.${system} = {
+        default = vhd;
+        inherit imageTar vhd;
+      };
+
       apps.${system} = {
         vhd = {
           type = "app";
-          program = "${
-            pkgs.writeShellApplication {
-              name = "vhd";
-              runtimeInputs = [ vhdEnv ];
-              text = ''
-                exec python ${./scripts/vhd/vhd.py}
-              '';
-            }
-          }/bin/vhd";
+          program = "${vhd}/bin/blog-vhd";
         };
 
         build = {

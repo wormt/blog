@@ -1,6 +1,91 @@
 {
   "nodes": {
+    "nix-caliga": {
+      "inputs": {
+        "nixpkgs": [
+          "nix-image",
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1782441864,
+        "narHash": "sha256-ugaLrN0wd7mwPnaC9CwP59J+XSz2x9hDFSTXhe4Lg4A=",
+        "owner": "nix-caliga",
+        "repo": "nix-caliga",
+        "rev": "91cf1948a1ac2e592da0f307189050917e1d20eb",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-caliga",
+        "repo": "nix-caliga",
+        "type": "github"
+      }
+    },
+    "nix-image": {
+      "inputs": {
+        "nix-caliga": "nix-caliga",
+        "nixpkgs": "nixpkgs",
+        "roc-overlay": "roc-overlay"
+      },
+      "locked": {
+        "path": "./nix",
+        "type": "path"
+      },
+      "original": {
+        "path": "./nix",
+        "type": "path"
+      },
+      "parent": []
+    },
     "nixpkgs": {
+      "locked": {
+        "lastModified": 1786862985,
+        "narHash": "sha256-FBJRXmbGXiSUDvYEbfLYRkckayyZ6SK1UEqhCrIZ2Cs=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "e5bdc4a41d4c072fe1e3787eaa0320a384741d44",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-darwin": {
+      "locked": {
+        "lastModified": 1787323337,
+        "narHash": "sha256-PqomwlB2WugM9MC4tV1L2/yosMOfug3KBDjmqOqD1bU=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "6062ba1a1b8b6281b12533c9075a2dbeb38f7e49",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-26.05-darwin",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs-darwin_2": {
+      "locked": {
+        "lastModified": 1785067121,
+        "narHash": "sha256-rdJdWxAcg5fnntU4DjPivPdVEN4F+VJavw+UWpEMeUI=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "329c3d2af6d1b618705150ea39f72c15eb4e613e",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixpkgs-26.05-darwin",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_2": {
       "locked": {
         "lastModified": 1787736819,
         "narHash": "sha256-cV5xEJJK3BvhU8rEd4mC9UsmDi5qscv/kzGPhBRC5WA=",
@@ -16,19 +101,20 @@
         "type": "github"
       }
     },
-    "nixpkgs-darwin": {
+    "osbuild-src": {
+      "flake": false,
       "locked": {
-        "lastModified": 1785067121,
-        "narHash": "sha256-rdJdWxAcg5fnntU4DjPivPdVEN4F+VJavw+UWpEMeUI=",
-        "owner": "NixOS",
-        "repo": "nixpkgs",
-        "rev": "329c3d2af6d1b618705150ea39f72c15eb4e613e",
+        "lastModified": 1788525160,
+        "narHash": "sha256-Gk4klfZTRCJCOqLVWFoH2MwDR68Gkju8lrh/3zpq/yk=",
+        "owner": "osbuild",
+        "repo": "osbuild",
+        "rev": "05d245c8e9a4615bc05b9bbcd79324625d24cfbc",
         "type": "github"
       },
       "original": {
-        "owner": "NixOS",
-        "ref": "nixpkgs-26.05-darwin",
-        "repo": "nixpkgs",
+        "owner": "osbuild",
+        "repo": "osbuild",
+        "rev": "05d245c8e9a4615bc05b9bbcd79324625d24cfbc",
         "type": "github"
       }
     },
@@ -81,9 +167,31 @@
     "roc-overlay": {
       "inputs": {
         "nixpkgs": [
+          "nix-image",
           "nixpkgs"
         ],
         "nixpkgs-darwin": "nixpkgs-darwin"
+      },
+      "locked": {
+        "lastModified": 1787748688,
+        "narHash": "sha256-2IxuTLJg6xsMihmSyz3aDqjMGlrrcqYmwosYp/CBNhs=",
+        "owner": "roc-lang",
+        "repo": "roc-overlay",
+        "rev": "8bdbcb28df215fc15f70074d237c29499cbdaaca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "roc-lang",
+        "repo": "roc-overlay",
+        "type": "github"
+      }
+    },
+    "roc-overlay_2": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ],
+        "nixpkgs-darwin": "nixpkgs-darwin_2"
       },
       "locked": {
         "lastModified": 1786382470,
@@ -101,10 +209,12 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs",
+        "nix-image": "nix-image",
+        "nixpkgs": "nixpkgs_2",
+        "osbuild-src": "osbuild-src",
         "pyproject-build-systems": "pyproject-build-systems",
         "pyproject-nix": "pyproject-nix",
-        "roc-overlay": "roc-overlay",
+        "roc-overlay": "roc-overlay_2",
         "uv2nix": "uv2nix",
         "wormtpkgs": "wormtpkgs"
       }

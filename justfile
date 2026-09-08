@@ -18,6 +18,7 @@ BCVK_PATH     := "/home/asv/.local/bin/bcvk"
 IMAGE_URL     := "ghcr.io/wormt"
 IMAGE_NAME    := "blog"
 IMAGE_TAG     := "latest"
+IMAGE_VERSION := "1.0." + `git rev-list --count HEAD`
 PODMAN_SOCKET := "unix:///run/user/6969/podman/podman.sock"
 PODMAN        := "podman --remote --url unix:///run/user/6969/podman/podman.sock"
 BCVK          := "distrobox-host-exec bash -lc 'export PATH=/var/home/asv/.local/bin:$PATH; cd /var/home/asv/workspaces/roc/blog2 && bcvk"
@@ -40,6 +41,9 @@ build:
 	@echo "image built at ./nix/image.tar"
 	{{PODMAN}} load -i nix/image.tar
 
+vhd output="image.vhd":
+	sudo nix run .#vhd -- "$(realpath -m '{{ output }}')"
+
 vm:
 	-distrobox-host-exec podman --remote --url '{{ PODMAN_SOCKET }}' rm -f {{ VM_NAME }}
 	{{BCVK}} ephemeral run {{ IMAGE_URL }}/{{ IMAGE_NAME }}:{{ IMAGE_TAG }} --rm --name={{ VM_NAME }} --detach --ssh-keygen --console'
@@ -50,8 +54,15 @@ vm-ssh *args:
 tunnel local_port="8080" guest_port="80":
 	./scripts/tunnel-bridge.nu {{ local_port }} {{ guest_port }}
 
-pup:
-	cd infra && pulumi up -s {{ IMAGE_NAME }} -y
+pup image_version=IMAGE_VERSION:
+	#!/usr/bin/env bash
+	set -euo pipefail
+	vhd_path="$(realpath -m image.vhd)"
+	sudo nix run .#vhd -- "$vhd_path"
+	cd infra
+	pulumi config set vhdPath "$vhd_path" -s {{ IMAGE_NAME }}
+	pulumi config set imageVersion "{{ image_version }}" -s {{ IMAGE_NAME }}
+	pulumi up -s {{ IMAGE_NAME }} -y
 
 pdown:
 	cd infra && pulumi down -s {{ IMAGE_NAME }} -y
