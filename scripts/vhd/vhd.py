@@ -219,9 +219,22 @@ def prepare_oci_archive(
         raise RuntimeError(msg)
 
     with tempfile.TemporaryDirectory(prefix='vhd-oci-') as temporary:
-        oci_archive = Path(temporary) / 'image.oci.tar'
+        temporary_path = Path(temporary)
+        oci_archive = temporary_path / 'image.oci.tar'
+        policy = temporary_path / 'policy.json'
+        policy.write_text(
+            json.dumps({
+                'default': [{'type': 'reject'}],
+                'transports': {
+                    'docker-archive': {'': [{'type': 'insecureAcceptAnything'}]}
+                },
+            }),
+            encoding='utf-8',
+        )
         command = [
             executable,
+            '--policy',
+            str(policy),
             'copy',
             f'docker-archive:{tarball}',
             f'oci-archive:{oci_archive}:image',
