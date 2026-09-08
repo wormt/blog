@@ -88,9 +88,7 @@
             '            "PATH": os.getenv("PATH", "/usr/sbin:/usr/bin"),' \
           --replace-fail \
             '        mounts += ["--dir", "/etc"]' \
-            '        mounts += ["--dir", "/etc"]
-        mounts += ["--dir", "/etc/ostree"]
-        mounts += ["--ro-bind", "${bootcHostPrepareRoot}", "/etc/ostree/prepare-root.conf"]'
+            '        mounts += ["--dir", "/etc", "--dir", "/etc/ostree", "--ro-bind", "${bootcHostPrepareRoot}", "/etc/ostree/prepare-root.conf"]'
 
         test -f "$out/osbuild/__init__.py"
         grep -Fq -- '"--ro-bind", "/nix/store", "/nix/store"' "$out/osbuild/buildroot.py"
