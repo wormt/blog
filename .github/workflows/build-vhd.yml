@@ -58,6 +58,8 @@ jobs:
           sudo modprobe loop
           test -c /dev/loop-control
 
+          sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE"
+
           sudo install -d -o "$(id -un)" -g "$(id -gn)" -m 0700 \
             /mnt/blog-vhd \
             /mnt/blog-vhd/tmp
@@ -74,6 +76,7 @@ jobs:
         shell: "bash"
         run: |
           set -euo pipefail
+          export HOME=/root
           vhd_app="$(
             nix build .#vhd --no-link --print-out-paths
           )"
