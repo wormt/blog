@@ -422,6 +422,25 @@ def create_manifest(
         },
     )
 
+    mkdir = disk_pipeline.add_stage(
+        module(index, 'Stage', 'org.osbuild.mkdir'),
+        {'paths': [{'path': 'mount://root/boot', 'mode': 0o755}]},
+    )
+    mkdir_device = mkdir.add_device(
+        'disk',
+        module(index, 'Device', 'org.osbuild.loopback'),
+        None,
+        {'filename': 'image.raw', 'partscan': True, 'lock': True},
+    )
+    mkdir.add_mount(
+        'root',
+        module(index, 'Mount', 'org.osbuild.ext4'),
+        mkdir_device,
+        1,
+        '/',
+        {},
+    )
+
     install = disk_pipeline.add_stage(
         module(index, 'Stage', 'org.osbuild.bootc.install-to-filesystem'),
         {
