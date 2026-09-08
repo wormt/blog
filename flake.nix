@@ -102,6 +102,7 @@
         pkgs.coreutils
         pkgs.curl
         pkgs.e2fsprogs
+        pkgs.ostree
         pkgs.qemu-utils
         pkgs.skopeo
         pkgs.util-linux
