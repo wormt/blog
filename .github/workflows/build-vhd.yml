@@ -1,0 +1,74 @@
+---
+name: "build-vhd"
+
+"on":
+  push:
+    branches:
+      - "main"
+      - "testing-actions"
+    paths:
+      - ".github/workflows/build-vhd.yml"
+      - "flake.lock"
+      - "flake.nix"
+      - "nix/**"
+      - "scripts/vhd/**"
+  workflow_dispatch: {}
+
+permissions:
+  contents: "read"
+
+concurrency:
+  group: "build-vhd-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  build-vhd:
+    runs-on: "ubuntu-latest"
+    timeout-minutes: 90
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@11d5960a326750d5838078e36cf38b85af677262" # yamllint disable-line rule:line-length
+        with:
+          persist-credentials: false
+
+      - name: "Prepare build storage and loop devices"
+        shell: "bash"
+        run: |
+          set -euo pipefail
+
+          sudo modprobe loop
+          test -c /dev/loop-control
+
+          sudo install -d -o "$USER" -g "$(id -gn)" -m 0700 \
+            /mnt/blog-vhd \
+            /mnt/blog-vhd/nix-builds \
+            /mnt/blog-vhd/tmp
+
+          echo "VHD_OUTPUT=/mnt/blog-vhd/image.vhd" >> "$GITHUB_ENV"
+          echo "VHD_TMPDIR=/mnt/blog-vhd/tmp" >> "$GITHUB_ENV"
+
+      - name: "Install Nix"
+        uses: "DeterminateSystems/nix-installer-action@c5a866b6ab867e88becbed4467b93592bce69f8a" # yamllint disable-line rule:line-length
+        with:
+          extra-conf: |
+            build-dir = /mnt/blog-vhd/nix-builds
+
+      - name: "Build VHD"
+        shell: "bash"
+        run: |
+          set -euo pipefail
+          vhd_app="$(
+            nix build .#vhd --no-link --print-out-paths
+          )"
+          sudo env TMPDIR="$VHD_TMPDIR" \
+            "$vhd_app/bin/blog-vhd" "$VHD_OUTPUT"
+          sudo chown "$USER:$(id -gn)" "$VHD_OUTPUT"
+
+      - name: "Upload VHD"
+        uses: "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02" # yamllint disable-line rule:line-length
+        with:
+          name: "blog-vhd-${{ github.sha }}"
+          path: /mnt/blog-vhd/image.vhd
+          if-no-files-found: "error"
+          compression-level: 1
+          retention-days: 7
