@@ -18,10 +18,33 @@ concurrency:
 jobs:
   build-vhd:
     runs-on: "ubuntu-latest"
+    container:
+      image: "registry.fedoraproject.org/fedora@sha256:8925a3420a5f6bd13b9230c6056d43695fa8fe5948b7013db89336a762f03893" # yamllint disable-line rule:line-length
+      options: "--privileged --pid=host"
+      volumes:
+        - "/lib/modules:/lib/modules:ro"
+        - "/mnt:/mnt"
     timeout-minutes: 90
     env:
       NIX_CONFIG: "sandbox = false"
     steps:
+      - name: "Install Fedora build dependencies"
+        shell: "bash"
+        run: |
+          set -euo pipefail
+          dnf --assumeyes install \
+            bootupd \
+            curl \
+            findutils \
+            git \
+            gzip \
+            kmod \
+            shadow-utils \
+            sudo \
+            tar \
+            util-linux \
+            xz
+
       - name: "Checkout"
         uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # yamllint disable-line rule:line-length
         with:
@@ -35,7 +58,7 @@ jobs:
           sudo modprobe loop
           test -c /dev/loop-control
 
-          sudo install -d -o "$USER" -g "$(id -gn)" -m 0700 \
+          sudo install -d -o "$(id -un)" -g "$(id -gn)" -m 0700 \
             /mnt/blog-vhd \
             /mnt/blog-vhd/tmp
 
@@ -44,6 +67,8 @@ jobs:
 
       - name: "Install Nix"
         uses: "DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25" # yamllint disable-line rule:line-length
+        with:
+          force-no-systemd: true
 
       - name: "Build VHD"
         shell: "bash"
@@ -54,7 +79,7 @@ jobs:
           )"
           sudo env TMPDIR="$VHD_TMPDIR" \
             "$vhd_app/bin/blog-vhd" "$VHD_OUTPUT"
-          sudo chown "$USER:$(id -gn)" "$VHD_OUTPUT"
+          sudo chown "$(id -un):$(id -gn)" "$VHD_OUTPUT"
 
       - name: "Upload VHD"
         uses: "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02" # yamllint disable-line rule:line-length

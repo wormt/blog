@@ -98,7 +98,6 @@
       vhdRuntimeInputs = [
         vhdEnv
         pkgs.bootc
-        pkgs.bootupd
         pkgs.bubblewrap
         pkgs.coreutils
         pkgs.curl
