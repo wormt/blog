@@ -22,19 +22,26 @@ in
       name = "ghcr.io/wormt/blog";
       tag = "latest";
       config.Labels."org.opencontainers.image.source" = "https://github.com/wormt/blog";
-      fromImage = pkgs.dockerTools.pullImage {
-        imageName = "quay.io/fedora/fedora-bootc";
-        imageDigest = "sha256:71e4c657272bba6c9c21c5825b26faec58fdfacf4b62e7643c98d3f50a3a3541"; # registry hash
-        sha256 = "sha256-k2ddp1m1FoazicUCa7E8cKmrRlayn6zZPQcjE8qNMjA";                          # nix store hash
-        finalImageTag = "44";
-        arch = "amd64";
-      };
+      fromImage =
+        (pkgs.dockerTools.pullImage {
+          imageName = "quay.io/fedora/fedora-bootc";
+          imageDigest = "sha256:71e4c657272bba6c9c21c5825b26faec58fdfacf4b62e7643c98d3f50a3a3541"; # registry hash
+          sha256 = "sha256-k2ddp1m1FoazicUCa7E8cKmrRlayn6zZPQcjE8qNMjA"; # nix store hash
+          finalImageTag = "44";
+          arch = "amd64";
+        }).overrideAttrs
+          {
+            REGISTRY_AUTH_FILE = pkgs.writeText "empty-registry-auth.json" "{}";
+          };
     };
 
     environment.systemPackages = [
       pkgs.nginx
       pkgs.racket-minimal
     ];
-    layeredImage.contents = [ acme-tiny-bin acme-racket ];
+    layeredImage.contents = [
+      acme-tiny-bin
+      acme-racket
+    ];
   };
 }
