@@ -11,6 +11,12 @@ let
   acme-racket = pkgs.runCommand "acme-racket" { } ''
     install -Dm755 ${../../../scripts/acme.rkt} $out/usr/local/libexec/acme.rkt
   '';
+  ostree-prepare-root = pkgs.writeTextDir "usr/lib/ostree/prepare-root.conf" ''
+    [composefs]
+    enabled = yes
+    [sysroot]
+    readonly = true
+  '';
 in
 {
   config = {
@@ -42,6 +48,7 @@ in
     layeredImage.contents = [
       acme-tiny-bin
       acme-racket
+      ostree-prepare-root
     ];
   };
 }
