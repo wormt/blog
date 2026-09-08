@@ -425,7 +425,6 @@ def create_manifest(
     install = disk_pipeline.add_stage(
         module(index, 'Stage', 'org.osbuild.bootc.install-to-filesystem'),
         {
-            'bootloader': 'grub',
             'root-mount-spec': f'UUID={ROOT_UUID}',
             'target-imgref': target_imgref,
         },
