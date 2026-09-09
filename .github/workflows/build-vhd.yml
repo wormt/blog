@@ -47,7 +47,7 @@ jobs:
             util-linux \
             xz
 
-          mkdir -m 0755 /etc/containers
+          install -m 0755 -d /etc/containers
           cat > /etc/containers/policy.json <<'EOF'
           {
             "default": [{"type": "reject"}],
