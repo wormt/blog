@@ -53,7 +53,7 @@ Templates :: {}.{
 			.concat("<nav><a href='/'>Home</a> <a href='/posts/'>Posts</a></nav>\n")
 			.concat("<main class='home'>\n")
 			.concat("<h1>brainworm.homes</h1>\n")
-			.concat("<p class='meta'>hi, i'm rat. you may know me from the fediverse.</p>\n")
+			.concat("<p class='meta'>hi, i'm wormt.</p>\n")
 			.concat("<div class='columns'>\n")
 			.concat(home_about_section())
 			.concat(home_contact_section())
@@ -76,12 +76,12 @@ Templates :: {}.{
 			.concat("<p>I am familiar with a variety of tooling such as Ansible, Terraform, Pulumi, Nix, and OCI images.</p>\n")
 			.concat("<p>I would like to learn more about the cloud native ecosystem, kernel dev, and consensus algorithms.</p>\n")
 			.concat("<p>I listen to maidcore, black metal, snailcore, epunk, cybergrind, blackgaze, and other adjacent genres. My favorite artist is Gezebelle Gaburgably.</p>\n")
-			.concat("<p>This website is built by a generator I wrote. Roc lang is used for HTML, Dart Sass for CSS, Nix+Fedora bootc for the OS, and Java+Pulumi for deploying the bootc image to Azure.</p>\n")
+			.concat("<p>This website is built by a blog generator I wrote. Roc lang is used for HTML, Dart Sass for CSS, Nix+Fedora bootc for the OS, and Java+Pulumi for deploying the bootc image to Azure.</p>\n")
 			.concat("</section>\n")
 
 	home_contact_section = ||
 		"<section id='contact'>\n<h2>contact</h2>\n<ul>\n"
-		.concat("<li>email: amysj3 <AT> outlook [d0t] com</li>\n</li>\n")
+		.concat("<li>email: amysj3 <AT> outlook [d0t] com <a href="https://keys.openpgp.org/search?q=amysj3%40outlook.com">[PGP</a></li>\n</li>\n")
 		.concat("<li>signal: <a href='sgnl://signal.me/#eu/wHd5AQFhcfg2lIZytRybPCT4TdfMhvwG7Ctbaz0_ZDn2N_XURKJLIr20fH02v3IM'>hyphen.99</a></li>\n")
 		.concat("<li>irc: l0b0t0my</li>\n</ul>\n")
 		.concat("<p class='wrap'><a href='https://age-encryption.org'>age</a>: age1vruuj5f3c4mt8w3fcur2wfztf566vj0pdeta3j4tfu2p84ualpaqacdcdl</p>\n")
