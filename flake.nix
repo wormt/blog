@@ -95,7 +95,17 @@
         grep -Fq -- '"PATH": os.getenv("PATH"' "$out/osbuild/buildroot.py"
         grep -Fq -- '"/etc/ostree/prepare-root.conf"' "$out/osbuild/buildroot.py"
       '';
+      bootupctlBios = pkgs.writeShellApplication {
+        name = "bootupctl";
+        text = ''
+          if (( $# >= 2 )) && [[ $1 == backend && $2 == install ]]; then
+            exec /usr/bin/bootupctl backend install --component BIOS "''${@:3}"
+          fi
+          exec /usr/bin/bootupctl "$@"
+        '';
+      };
       vhdRuntimeInputs = [
+        bootupctlBios
         vhdEnv
         pkgs.bootc
         pkgs.bubblewrap
