@@ -1,0 +1,110 @@
+---
+name: "build-vhd"
+
+"on":
+  push:
+    branches:
+      - "main"
+      - "testing-actions"
+  workflow_dispatch: {}
+
+permissions:
+  contents: "read"
+
+concurrency:
+  group: "build-vhd-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  build-vhd:
+    runs-on: "ubuntu-latest"
+    container:
+      image: "registry.fedoraproject.org/fedora@sha256:8925a3420a5f6bd13b9230c6056d43695fa8fe5948b7013db89336a762f03893" # yamllint disable-line rule:line-length
+      options: "--privileged --pid=host"
+      volumes:
+        - "/dev:/dev"
+        - "/lib/modules:/lib/modules:ro"
+        - "/mnt:/mnt"
+    timeout-minutes: 90
+    env:
+      NIX_CONFIG: "sandbox = false"
+    steps:
+      - name: "Install Fedora build dependencies"
+        shell: "bash"
+        run: |
+          set -euo pipefail
+          dnf --assumeyes install \
+            bootupd \
+            curl \
+            findutils \
+            git \
+            grub2-pc-modules \
+            grub2-tools \
+            gzip \
+            kmod \
+            podman \
+            shadow-utils \
+            sudo \
+            tar \
+            util-linux \
+            xz
+
+          install -m 0755 -d /etc/containers
+          cat > /etc/containers/policy.json <<'EOF'
+          {
+            "default": [{"type": "reject"}],
+            "transports": {
+              "oci-archive": {
+                "": [{"type": "insecureAcceptAnything"}]
+              }
+            }
+          }
+          EOF
+
+      - name: "Checkout"
+        uses: "actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1" # yamllint disable-line rule:line-length
+        with:
+          persist-credentials: false
+
+      - name: "Prepare build storage and loop devices"
+        shell: "bash"
+        run: |
+          set -euo pipefail
+
+          sudo modprobe loop
+          test -c /dev/loop-control
+
+          sudo chown -R "$(id -u):$(id -g)" "$GITHUB_WORKSPACE"
+
+          sudo install -d -o "$(id -un)" -g "$(id -gn)" -m 0700 \
+            /mnt/blog-vhd \
+            /mnt/blog-vhd/tmp
+
+          echo "VHD_OUTPUT=/mnt/blog-vhd/image.vhd" >> "$GITHUB_ENV"
+          echo "VHD_TMPDIR=/mnt/blog-vhd/tmp" >> "$GITHUB_ENV"
+
+      - name: "Install Nix"
+        uses: "DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25" # yamllint disable-line rule:line-length
+        with:
+          force-no-systemd: true
+
+      - name: "Build VHD"
+        shell: "bash"
+        run: |
+          set -euo pipefail
+          export HOME=/root
+          vhd_app="$(
+            nix build .#vhd --no-link --print-out-paths
+          )"
+          sudo env TMPDIR="$VHD_TMPDIR" \
+            "$vhd_app/bin/blog-vhd" "$VHD_OUTPUT"
+          sudo chown "$(id -un):$(id -gn)" "$VHD_OUTPUT"
+
+      - name: "Upload VHD"
+        uses: "actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02" # yamllint disable-line rule:line-length
+        with:
+          name: "blog-vhd-${{ github.sha }}"
+          path: "/mnt/blog-vhd/image.vhd"
+          if-no-files-found: "error"
+          compression-level: 1
+          retention-days: 7

@@ -26,7 +26,7 @@ LOGGER = logging.getLogger(__name__)
 
 SECTOR_SIZE = 512
 PARTITION_START = 2048
-DEFAULT_DISK_SIZE = 10 * 1024**3
+DEFAULT_DISK_SIZE = 16 * 1024**3
 DISK_UUID = '0x7b7795e7'
 ROOT_UUID = '156f0420-627b-4151-ae6f-fda298097515'
 DEFAULT_IMAGE_NAME = 'localhost/nix-image:latest'
@@ -219,9 +219,22 @@ def prepare_oci_archive(
         raise RuntimeError(msg)
 
     with tempfile.TemporaryDirectory(prefix='vhd-oci-') as temporary:
-        oci_archive = Path(temporary) / 'image.oci.tar'
+        temporary_path = Path(temporary)
+        oci_archive = temporary_path / 'image.oci.tar'
+        policy = temporary_path / 'policy.json'
+        policy.write_text(
+            json.dumps({
+                'default': [{'type': 'reject'}],
+                'transports': {
+                    'docker-archive': {'': [{'type': 'insecureAcceptAnything'}]}
+                },
+            }),
+            encoding='utf-8',
+        )
         command = [
             executable,
+            '--policy',
+            str(policy),
             'copy',
             f'docker-archive:{tarball}',
             f'oci-archive:{oci_archive}:image',
@@ -422,10 +435,28 @@ def create_manifest(
         },
     )
 
+    mkdir = disk_pipeline.add_stage(
+        module(index, 'Stage', 'org.osbuild.mkdir'),
+        {'paths': [{'path': 'mount://root/boot', 'mode': 0o755}]},
+    )
+    mkdir_device = mkdir.add_device(
+        'disk',
+        module(index, 'Device', 'org.osbuild.loopback'),
+        None,
+        {'filename': 'image.raw', 'partscan': True, 'lock': True},
+    )
+    mkdir.add_mount(
+        'root',
+        module(index, 'Mount', 'org.osbuild.ext4'),
+        mkdir_device,
+        1,
+        '/',
+        {},
+    )
+
     install = disk_pipeline.add_stage(
         module(index, 'Stage', 'org.osbuild.bootc.install-to-filesystem'),
         {
-            'bootloader': 'grub',
             'root-mount-spec': f'UUID={ROOT_UUID}',
             'target-imgref': target_imgref,
         },

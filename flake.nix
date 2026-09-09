@@ -59,6 +59,12 @@
       );
       vhdEnv = vhdPython.mkVirtualEnv "vhd-env" vhdWorkspace.deps.default;
       vhdDevEnv = vhdPython.mkVirtualEnv "vhd-dev-env" vhdWorkspace.deps.all;
+      bootcHostPrepareRoot = pkgs.writeText "bootc-host-prepare-root.conf" ''
+        [composefs]
+        enabled = yes
+        [sysroot]
+        readonly = true
+      '';
       osbuildModules = pkgs.runCommand "osbuild-modules-193" { nativeBuildInputs = [ vhdEnv ]; } ''
         mkdir -p "$out"
         cp -R \
@@ -79,19 +85,34 @@
             '        mounts = ["--dir", "/nix", "--ro-bind", "/nix/store", "/nix/store"]' \
           --replace-fail \
             '            "PATH": "/usr/sbin:/usr/bin",' \
-            '            "PATH": os.getenv("PATH", "/usr/sbin:/usr/bin"),'
+            '            "PATH": os.getenv("PATH", "/usr/sbin:/usr/bin"),' \
+          --replace-fail \
+            '        mounts += ["--dir", "/etc"]' \
+            '        mounts += ["--dir", "/etc", "--dir", "/etc/ostree", "--ro-bind", "${bootcHostPrepareRoot}", "/etc/ostree/prepare-root.conf"]'
 
         test -f "$out/osbuild/__init__.py"
         grep -Fq -- '"--ro-bind", "/nix/store", "/nix/store"' "$out/osbuild/buildroot.py"
         grep -Fq -- '"PATH": os.getenv("PATH"' "$out/osbuild/buildroot.py"
+        grep -Fq -- '"/etc/ostree/prepare-root.conf"' "$out/osbuild/buildroot.py"
       '';
+      bootupctlBios = pkgs.writeShellApplication {
+        name = "bootupctl";
+        text = ''
+          if (( $# >= 2 )) && [[ $1 == backend && $2 == install ]]; then
+            exec /usr/bin/bootupctl backend install --component BIOS "''${@:3}"
+          fi
+          exec /usr/bin/bootupctl "$@"
+        '';
+      };
       vhdRuntimeInputs = [
+        bootupctlBios
         vhdEnv
         pkgs.bootc
         pkgs.bubblewrap
         pkgs.coreutils
         pkgs.curl
         pkgs.e2fsprogs
+        pkgs.ostree
         pkgs.qemu-utils
         pkgs.skopeo
         pkgs.util-linux
