@@ -38,6 +38,8 @@ jobs:
             curl \
             findutils \
             git \
+            grub2-pc-modules \
+            grub2-tools \
             gzip \
             kmod \
             podman \
