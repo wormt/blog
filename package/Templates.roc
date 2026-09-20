@@ -81,7 +81,7 @@ Templates :: {}.{
 
 	home_contact_section = ||
 		"<section id='contact'>\n<h2>contact</h2>\n<ul>\n"
-		.concat("<li>email: amysj3 <AT> outlook [d0t] com <a href="https://keys.openpgp.org/search?q=amysj3%40outlook.com">[PGP</a></li>\n</li>\n")
+		.concat("<li>email: amysj3 <AT> outlook [d0t] com <a href='https://keys.openpgp.org/search?q=amysj3%40outlook.com'>[PGP</a></li>\n</li>\n")
 		.concat("<li>signal: <a href='sgnl://signal.me/#eu/wHd5AQFhcfg2lIZytRybPCT4TdfMhvwG7Ctbaz0_ZDn2N_XURKJLIr20fH02v3IM'>hyphen.99</a></li>\n")
 		.concat("<li>irc: l0b0t0my</li>\n</ul>\n")
 		.concat("<p class='wrap'><a href='https://age-encryption.org'>age</a>: age1vruuj5f3c4mt8w3fcur2wfztf566vj0pdeta3j4tfu2p84ualpaqacdcdl</p>\n")
