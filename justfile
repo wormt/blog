@@ -41,6 +41,9 @@ build:
 	@echo "image built at ./nix/image.tar"
 	{{PODMAN}} load -i nix/image.tar
 
+load:
+	{{PODMAN}} load -i nix/image.tar
+
 vhd output="image.vhd":
 	sudo nix run .#vhd -- "$(realpath -m '{{ output }}')"
 
@@ -49,7 +52,7 @@ vm:
 	{{BCVK}} ephemeral run {{ IMAGE_URL }}/{{ IMAGE_NAME }}:{{ IMAGE_TAG }} --rm --name={{ VM_NAME }} --detach --ssh-keygen --console'
 
 vm-ssh *args:
-	{{BCVK}} ephemeral ssh {{ VM_NAME }} {{ args }}'
+	{{BCVK}} ephemeral ssh {{ VM_NAME }} "$@"' _ {{quote(args)}}
 
 tunnel local_port="8080" guest_port="80":
 	./scripts/tunnel-bridge.nu {{ local_port }} {{ guest_port }}
