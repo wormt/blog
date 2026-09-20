@@ -5,6 +5,13 @@ body:has(> main.home) {
 main.home {
   > h1 {
     margin-bottom: 0.25rem;
+    transition: text-shadow 0.15s;
+
+    &:hover {
+      text-shadow:
+        2px 0 #c44b,
+        -2px 0 var(--color-accent-cyan);
+    }
 
     + .meta {
       margin-bottom: 2rem;
