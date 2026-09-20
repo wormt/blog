@@ -34,7 +34,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
-/** Uploads the bootc VHD and publishes it as an Azure Compute Gallery image version. */
 public final class ImageResource {
   private static final String APP_NAME = "blog";
   private static final Region APP_REGION_PRIMARY = Region.US_WEST2;
