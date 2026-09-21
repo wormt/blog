@@ -16,6 +16,7 @@ in
   config = {
     caliga.os = "fedora";
     caliga.core.enable = true;
+    nix.enable = true;
     bootc.ostree-prepare-root.createConf = true;
     system.stateVersion = "26.05";
 
