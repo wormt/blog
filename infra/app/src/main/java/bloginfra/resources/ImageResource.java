@@ -99,9 +99,11 @@ public final class ImageResource {
             CommandArgs.builder()
                 .create(
                     Output.format(
-                        "az storage blob upload --account-name %s"
+                        "timeout 1000s az storage blob upload --account-name %s"
                             + " --container-name vhds --name %s --type page"
-                            + " --file '%s' --overwrite true --only-show-errors",
+                            + " --file '%s' --overwrite true --only-show-errors"
+                            + " --auth-mode login >/tmp/blog-vhd-upload.log 2>&1"
+                            + " || (tail -c 4000 /tmp/blog-vhd-upload.log; exit 1)",
                         storage.name(), blobName, vhdPath))
                 .triggers(List.of(blobName, sha256Hex(Path.of(vhdPath))))
                 .build(),

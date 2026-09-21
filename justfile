@@ -57,21 +57,29 @@ vm-ssh *args:
 tunnel local_port="8080" guest_port="80":
 	./scripts/tunnel-bridge.nu {{ local_port }} {{ guest_port }}
 
-pup image_version=IMAGE_VERSION:
+pup vhdPath="" image_version=IMAGE_VERSION:
 	#!/usr/bin/env bash
 	set -euo pipefail
-	vhd_path="$(realpath -m image.vhd)"
-	sudo nix run .#vhd -- "$vhd_path"
+	if [ -n "{{ vhdPath }}" ]; then
+		vhd_path="$(realpath -m "{{ vhdPath }}")"
+	else
+		just vhd
+		vhd_path="$(realpath -m image.vhd)"
+	fi
 	cd infra
 	pulumi config set vhdPath "$vhd_path" -s {{ IMAGE_NAME }}
 	pulumi config set imageVersion "{{ image_version }}" -s {{ IMAGE_NAME }}
 	pulumi up -s {{ IMAGE_NAME }} -y
 
-upload output="image.vhd":
+upload vhdPath="":
 	#!/usr/bin/env bash
 	set -euo pipefail
-	vhd_path="$(realpath -m '{{ output }}')"
-	[ -f "$vhd_path" ] || { echo "VHD not found at $vhd_path — run 'just vhd' first" >&2; exit 1; }
+	if [ -n "{{ vhdPath }}" ]; then
+		vhd_path="$(realpath -m "{{ vhdPath }}")"
+	else
+		just vhd
+		vhd_path="$(realpath -m image.vhd)"
+	fi
 	account="$(cd infra && pulumi stack output sourceVhdUrl -s {{ IMAGE_NAME }} | sed -E 's~^https://([^./]+)\..*~\1~')"
 	az storage blob upload --account-name "$account" --container-name vhds \
 		--name "blog-edge-{{ IMAGE_VERSION }}.vhd" --type page \
