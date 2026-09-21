@@ -91,5 +91,17 @@ pdown:
 preset:
 	cd infra && pulumi destroy -s {{ IMAGE_NAME }} -y && pulumi stack rm -f -s {{ IMAGE_NAME }} -y
 
+
+mac-machine-init:
+	podman machine init --rosetta --cpus 4 --memory 4096
+	podman machine start
+
+mac-pull:
+	podman pull --platform linux/amd64 {{ IMAGE_URL }}/{{ IMAGE_NAME }}:{{ IMAGE_TAG }}
+
+mac-vm port="8081": mac-pull
+	-podman rm -f {{ VM_NAME }}
+	podman run --rm -d --name {{ VM_NAME }} --platform linux/amd64 -p {{ port }}:80 {{ IMAGE_URL }}/{{ IMAGE_NAME }}:{{ IMAGE_TAG }} \
+
 rebuild: build vm
 	@echo "VM {{VM_NAME}} rebuilt"
