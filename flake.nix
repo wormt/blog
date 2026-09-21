@@ -274,6 +274,7 @@
           pkgs.pulumiPackages.pulumi-java
           pkgs.pulumiPackages.pulumi-azure-native
           pkgs.pulumiPackages.pulumi-random
+          pkgs.pulumiPackages.pulumi-command
           pkgs.google-java-format
           pkgs.gradle
           pkgs.uv

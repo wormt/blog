@@ -2,11 +2,8 @@ package bloginfra.resources;
 
 import bloginfra.Region;
 import com.pulumi.Context;
-import com.pulumi.asset.FileAsset;
 import com.pulumi.azure.storage.Account;
 import com.pulumi.azure.storage.AccountArgs;
-import com.pulumi.azure.storage.Blob;
-import com.pulumi.azure.storage.BlobArgs;
 import com.pulumi.azure.storage.Container;
 import com.pulumi.azure.storage.ContainerArgs;
 import com.pulumi.azurenative.compute.Gallery;
@@ -27,11 +24,18 @@ import com.pulumi.azurenative.compute.inputs.GalleryImageVersionStorageProfileAr
 import com.pulumi.azurenative.compute.inputs.GalleryOSDiskImageArgs;
 import com.pulumi.azurenative.compute.inputs.TargetRegionArgs;
 import com.pulumi.azurenative.resources.ResourceGroup;
+import com.pulumi.command.local.Command;
+import com.pulumi.command.local.CommandArgs;
 import com.pulumi.core.Output;
 import com.pulumi.random.RandomString;
 import com.pulumi.random.RandomStringArgs;
+import com.pulumi.resources.CustomResourceOptions;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.List;
 import java.util.Map;
 
 public final class ImageResource {
@@ -86,17 +90,22 @@ public final class ImageResource {
                 .containerAccessType("private")
                 .build());
 
-    var sourceVhd =
-        new Blob(
-            "source-vhd",
-            BlobArgs.builder()
-                .name("blog-edge-" + version + ".vhd")
-                .storageContainerId(container.id())
-                .type("Page")
-                .parallelism(8)
-                .source(new FileAsset(vhdPath))
-                .build());
-    this.sourceVhdUrl = sourceVhd.url();
+    var blobName = "blog-edge-" + version + ".vhd";
+    this.sourceVhdUrl =
+        Output.format("https://%s.blob.core.windows.net/vhds/%s", storage.name(), blobName);
+    var uploadVhd =
+        new Command(
+            "upload-source-vhd",
+            CommandArgs.builder()
+                .create(
+                    Output.format(
+                        "az storage blob upload --account-name %s"
+                            + " --container-name vhds --name %s --type page"
+                            + " --file '%s' --overwrite true --only-show-errors",
+                        storage.name(), blobName, vhdPath))
+                .triggers(List.of(blobName, sha256Hex(Path.of(vhdPath))))
+                .build(),
+            CustomResourceOptions.builder().dependsOn(container).build());
 
     var gallery =
         new Gallery(
@@ -165,7 +174,8 @@ public final class ImageResource {
                                 .build())
                         .build())
                 .tags(tags)
-                .build());
+                .build(),
+            CustomResourceOptions.builder().dependsOn(uploadVhd).build());
   }
 
   public ImageOutputs outputs() {
@@ -183,6 +193,26 @@ public final class ImageResource {
     if (!version.matches("[0-9]+\\.[0-9]+\\.[0-9]+")) {
       throw new IllegalArgumentException(
           "blog:imageVersion must use Azure's Major.Minor.Patch format: " + version);
+    }
+  }
+
+  private static String sha256Hex(Path path) {
+    try {
+      var digest = MessageDigest.getInstance("SHA-256");
+      var buf = new byte[8 * 1024 * 1024];
+      try (var input = Files.newInputStream(path)) {
+        int read;
+        while ((read = input.read(buf)) != -1) {
+          digest.update(buf, 0, read);
+        }
+      }
+      var hex = new StringBuilder();
+      for (byte b : digest.digest()) {
+        hex.append(String.format("%02x", b));
+      }
+      return hex.toString();
+    } catch (NoSuchAlgorithmException | IOException e) {
+      throw new IllegalStateException("failed to hash file: " + e.getMessage());
     }
   }
 }
