@@ -67,6 +67,16 @@ pup image_version=IMAGE_VERSION:
 	pulumi config set imageVersion "{{ image_version }}" -s {{ IMAGE_NAME }}
 	pulumi up -s {{ IMAGE_NAME }} -y
 
+upload output="image.vhd":
+	#!/usr/bin/env bash
+	set -euo pipefail
+	vhd_path="$(realpath -m '{{ output }}')"
+	[ -f "$vhd_path" ] || { echo "VHD not found at $vhd_path — run 'just vhd' first" >&2; exit 1; }
+	account="$(cd infra && pulumi stack output sourceVhdUrl -s {{ IMAGE_NAME }} | sed -E 's~^https://([^./]+)\..*~\1~')"
+	az storage blob upload --account-name "$account" --container-name vhds \
+		--name "blog-edge-{{ IMAGE_VERSION }}.vhd" --type page \
+		--file "$vhd_path" --overwrite true --only-show-errors
+
 pdown:
 	cd infra && pulumi down -s {{ IMAGE_NAME }} -y
 
