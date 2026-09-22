@@ -39,7 +39,7 @@ public final class NetworkResource {
     }
   }
 
-  public NetworkResource(ResourceGroup rg) {
+  public NetworkResource(ResourceGroup rg, List<String> sshAllowedSubnets) {
     String baseName = APP_NAME + "-" + APP_REGION_PRIMARY.slug();
     this.vnet =
         new VirtualNetwork(
@@ -62,10 +62,32 @@ public final class NetworkResource {
                             .access(SecurityRuleAccess.Allow)
                             .direction(SecurityRuleDirection.Inbound)
                             .protocol("Tcp")
-                            .sourceAddressPrefix("67.67.67.67/32")
+                            .sourceAddressPrefixes(sshAllowedSubnets)
                             .sourcePortRange("*")
                             .destinationAddressPrefix("*")
                             .destinationPortRange("22")
+                            .build(),
+                        SecurityRuleArgs.builder()
+                            .name("allow-http-inbound")
+                            .priority(200)
+                            .access(SecurityRuleAccess.Allow)
+                            .direction(SecurityRuleDirection.Inbound)
+                            .protocol("Tcp")
+                            .sourceAddressPrefixes("*")
+                            .sourcePortRange("*")
+                            .destinationAddressPrefix("*")
+                            .destinationPortRange("80")
+                            .build(),
+                        SecurityRuleArgs.builder()
+                            .name("allow-https-inbound")
+                            .priority(250)
+                            .access(SecurityRuleAccess.Allow)
+                            .direction(SecurityRuleDirection.Inbound)
+                            .protocol("Tcp")
+                            .sourceAddressPrefixes("*")
+                            .sourcePortRange("*")
+                            .destinationAddressPrefix("*")
+                            .destinationPortRange("443")
                             .build(),
                         SecurityRuleArgs.builder()
                             .name("deny-all-inbound")
