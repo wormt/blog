@@ -39,10 +39,17 @@ in
 
   selinux.fileContexts = {
     "/var/www/blog(/.*)?" = "httpd_sys_content_t";
+    "/var/www/challenges(/.*)?" = "httpd_sys_content_t";
   };
 
   systemd.tmpfiles.settings."20-var-log-nginx"."/var/log/nginx".d = {
     mode = "0700";
+    user = "root";
+    group = "root";
+  };
+
+  systemd.tmpfiles.settings."20-var-www-challenges"."/var/www/challenges".d = {
+    mode = "0755";
     user = "root";
     group = "root";
   };
@@ -73,6 +80,9 @@ in
         root /var/www/blog;
         index index.html;
     
+        location /.well-known/acme-challenge/ {
+          alias /var/www/challenges/;
+        }
         location / {
           try_files $uri $uri/ =404;
         }

@@ -8,7 +8,8 @@
 (unless (zero? ((get-ffi-obj "geteuid" (ffi-lib #f) (_fun -> _int))))
   (error 'acme "Must run as root."))
 
-((get-ffi-obj "umask" (ffi-lib #f) (_fun _uint -> _uint)) #o077)
+(define umask! (get-ffi-obj "umask" (ffi-lib #f) (_fun _uint -> _uint)))
+(umask! #o077)
 
 (unless (directory-exists? "/etc/nginx/certs/")
   (make-directory* "/etc/nginx/certs/")
@@ -63,6 +64,8 @@
 
 (when (file-exists? "/etc/nginx/certs/brainworm.homes.crt.tmp")
   (delete-file "/etc/nginx/certs/brainworm.homes.crt.tmp"))
+
+(umask! #o022)
 
 (call-with-output-file
  "/etc/nginx/certs/brainworm.homes.crt.tmp"
