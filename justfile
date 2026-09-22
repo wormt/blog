@@ -57,7 +57,7 @@ vm-ssh *args:
 tunnel local_port="8080" guest_port="80":
 	./scripts/tunnel-bridge.nu {{ local_port }} {{ guest_port }}
 
-pup vhdPath="" image_version=IMAGE_VERSION:
+pup vhdPath="" ssh_allowed_subnets='["127.0.0.1/32"]' image_version=IMAGE_VERSION:
 	#!/usr/bin/env bash
 	set -euo pipefail
 	if [ -n "{{ vhdPath }}" ]; then
@@ -69,6 +69,7 @@ pup vhdPath="" image_version=IMAGE_VERSION:
 	cd infra
 	pulumi config set vhdPath "$vhd_path" -s {{ IMAGE_NAME }}
 	pulumi config set imageVersion "{{ image_version }}" -s {{ IMAGE_NAME }}
+	pulumi config set sshAllowedSubnets "{{ ssh_allowed_subnets }}" -s {{ IMAGE_NAME }}
 	pulumi up -s {{ IMAGE_NAME }} -y
 
 upload vhdPath="":
