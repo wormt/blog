@@ -2,7 +2,7 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nix-caliga = {
-      url = "github:wormt/nix-caliga/overlayfs-nix-store";
+      url = "github:nix-caliga/nix-caliga/overlayfs-nix-store";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     roc-overlay.url = "github:roc-lang/roc-overlay";

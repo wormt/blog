@@ -23,15 +23,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1789940951,
-        "narHash": "sha256-HKCEtsAOgcbSCyaRc4oo1hgCZ8h3N6mDAS96qRV+UNw=",
-        "owner": "wormt",
+        "lastModified": 1790067822,
+        "narHash": "sha256-koZU2JRNx5+nEE6EO0JsbomjTO5z3uncm45Aszdivq4=",
+        "owner": "nix-caliga",
         "repo": "nix-caliga",
-        "rev": "bd7c1db44ad91977022b7780ccc06cee88c85214",
+        "rev": "70bf5c59bd2fca664341a4baa0f1d6441d4c09de",
         "type": "github"
       },
       "original": {
-        "owner": "wormt",
+        "owner": "nix-caliga",
         "ref": "overlayfs-nix-store",
         "repo": "nix-caliga",
         "type": "github"
