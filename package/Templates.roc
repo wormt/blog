@@ -71,17 +71,13 @@ Templates :: {}.{
 	home_about_section = ||
 		"<section id='about'>\n<h2>about</h2>\n"
 			.concat("<p>hi, im wormt.</p>\n")
-			.concat("<p>I touch computers sometimes. I'm currently working full time as a system administrator while studying computer science. I read RFCs for fun.</p>\n")
-			.concat("<p>I like programming. Zig is the best programming language. Unfortunately I have to minmax Java & C++ for the time being.</p>\n")
-			.concat("<p>I am familiar with a variety of tooling such as Ansible, Terraform, Pulumi, Nix, and OCI images.</p>\n")
-			.concat("<p>I would like to learn more about the cloud native ecosystem, kernel dev, and consensus algorithms.</p>\n")
-			.concat("<p>I listen to maidcore, black metal, snailcore, epunk, cybergrind, blackgaze, and other adjacent genres. My favorite artist is Gezebelle Gaburgably.</p>\n")
-			.concat("<p>This website is built by a blog generator I wrote. Roc lang is used for HTML, Dart Sass for CSS, Nix+Fedora bootc for the OS, and Java+Pulumi for deploying the bootc image to Azure.</p>\n")
+			.concat("<p>I touch computers sometimes.</p>\n")
+			.concat("<p>This website is built by a blog generator I wrote. Roc lang is used for HTML, Dart Sass for CSS, Nix+Fedora bootc for the OS, and Java+Pulumi for deploying the bootc image to Azure. There is also a script written in Racket for SSL certificate management.</p>\n")
 			.concat("</section>\n")
 
 	home_contact_section = ||
 		"<section id='contact'>\n<h2>contact</h2>\n<ul>\n"
-		.concat("<li>email: amysj3 <AT> outlook [d0t] com <a href='https://keys.openpgp.org/search?q=amysj3%40outlook.com'>[PGP</a></li>\n</li>\n")
+		.concat("<li>email: amysj3 <AT> outlook [d0t] com <a href='https://keys.openpgp.org/search?q=amysj3%40outlook.com'>[PGP]</a></li>\n</li>\n")
 		.concat("<li>signal: <a href='sgnl://signal.me/#eu/wHd5AQFhcfg2lIZytRybPCT4TdfMhvwG7Ctbaz0_ZDn2N_XURKJLIr20fH02v3IM'>hyphen.99</a></li>\n")
 		.concat("<li>irc: l0b0t0my</li>\n</ul>\n")
 		.concat("<p class='wrap'><a href='https://age-encryption.org'>age</a>: age1vruuj5f3c4mt8w3fcur2wfztf566vj0pdeta3j4tfu2p84ualpaqacdcdl</p>\n")
