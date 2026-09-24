@@ -6,11 +6,11 @@
     group = "root";
   };
 
-  users.users.admin = {
+  users.users.wormt = {
     isNormalUser = true;
-    uid = 1000;
-    description = "wormt";
-    initialPassword = "astronomy-doorknob-amusing-brewery";
-    createHome = true;
+    uid = 6767;
+    description = "the best";
+    initialHashedPassword = "$y$j9T$ZHaXNt8NPMF5bJJasx.Kv.$qlWjFBN9dkc/4/CthvFbvjZ4QkmjEfkVWh9hpXaccS/";
+	extraGroups = ["wheel"];
   };
 }
