@@ -42,8 +42,8 @@ public final class ComputeResource {
                         .imageReference(ImageReferenceArgs.builder().id(imageVersionId).build())
                         .osDisk(
                             OSDiskArgs.builder()
-                                .name("osdisk-" + baseName + "-01")
                                 .createOption(DiskCreateOptionTypes.FromImage)
+                                .deleteOption(DiskDeleteOptionTypes.Delete)
                                 .diskSizeGB(64)
                                 .managedDisk(
                                     ManagedDiskParametersArgs.builder()
