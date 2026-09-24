@@ -7,6 +7,10 @@
     };
     roc-overlay.url = "github:roc-lang/roc-overlay";
     roc-overlay.inputs.nixpkgs.follows = "nixpkgs";
+    bootc-image-prefetcher = {
+      url = "github:nix-caliga/bootc-image-prefetcher";
+      flake = false;
+    };
   };
 
   outputs =

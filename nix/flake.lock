@@ -1,5 +1,21 @@
 {
   "nodes": {
+    "bootc-image-prefetcher": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1790155135,
+        "narHash": "sha256-E8z/h+0zwG3D79CaaKBxb9XpSZujmOhQHOxN6RNZgnQ=",
+        "owner": "nix-caliga",
+        "repo": "bootc-image-prefetcher",
+        "rev": "418c1ae5b1accbe3488705fc50fad0580fa5ef23",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nix-caliga",
+        "repo": "bootc-image-prefetcher",
+        "type": "github"
+      }
+    },
     "nix-caliga": {
       "inputs": {
         "nixpkgs": [
@@ -76,6 +92,7 @@
     },
     "root": {
       "inputs": {
+        "bootc-image-prefetcher": "bootc-image-prefetcher",
         "nix-caliga": "nix-caliga",
         "nixpkgs": "nixpkgs",
         "roc-overlay": "roc-overlay"

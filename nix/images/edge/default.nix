@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, inputs, ... }:
 
 let
   acme-tiny = pkgs.fetchurl {
@@ -24,17 +24,12 @@ in
       name = "ghcr.io/wormt/blog";
       tag = "latest";
       config.Labels."org.opencontainers.image.source" = "https://github.com/wormt/blog";
-      fromImage =
-        (pkgs.dockerTools.pullImage {
-          imageName = "quay.io/fedora/fedora-bootc";
-          imageDigest = "sha256:2e1c2bbd87411f2c6d90271bf2c51bf036c9cc4605cededbc56b2a9d998d1271"; # registry hash
-          sha256 = "sha256-CahQucbmIDS5w1X6iIkJE2N8QSt4jpXS2vR31oSr3Ls="; # nix store hash
-          finalImageTag = "44";
-          arch = "amd64";
-        }).overrideAttrs
-          {
-            REGISTRY_AUTH_FILE = pkgs.writeText "empty-registry-auth.json" "{}";
-          };
+      fromImage = pkgs.dockerTools.pullImage (
+        (import "${inputs.bootc-image-prefetcher}/pins/fedora-bootc/44.nix")
+        // {
+          imageName = "registry.fedoraproject.org/fedora-bootc";
+        }
+      );
     };
 
     environment.systemPackages = [
