@@ -1,3 +1,5 @@
+{ pkgs, ... }:
+
 {
   # this is necessary if /var/home doesnt exist on first boot.
   systemd.tmpfiles.settings."00-var-home"."/var/home".d = {
