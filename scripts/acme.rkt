@@ -92,6 +92,8 @@
 
 (unless (zero? (system*/exit-code
   (find-executable-path "nginx")
+   "-c"
+   "/etc/nginx/nginx.conf"
    "-s"
    "reload"
    ))(error 'acme "nginx reload failed"))

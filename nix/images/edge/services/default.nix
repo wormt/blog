@@ -1,5 +1,8 @@
 {
-  imports = [ ./nginx.nix ];
+  imports = [
+    ./acme.nix
+    ./nginx.nix
+  ];
 
   # depends on pid 1
   services.bootc-update = {

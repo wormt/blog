@@ -7,9 +7,15 @@ let
   };
   acme-tiny-bin = pkgs.runCommand "acme-tiny" { } ''
     install -Dm755 ${acme-tiny} $out/usr/local/bin/acme_tiny
+    substituteInPlace $out/usr/local/bin/acme_tiny \
+      --replace-fail "/usr/bin/env python3" "${pkgs.python3}/bin/python3"
   '';
   acme-racket = pkgs.runCommand "acme-racket" { } ''
     install -Dm755 ${../../../scripts/acme.rkt} $out/usr/local/libexec/acme.rkt
+    substituteInPlace $out/usr/local/libexec/acme.rkt \
+      --replace-fail '"openssl"' '"${pkgs.openssl}/bin/openssl"' \
+      --replace-fail '"acme_tiny"' '"${acme-tiny-bin}/usr/local/bin/acme_tiny"' \
+      --replace-fail '"nginx"' '"${pkgs.nginx}/bin/nginx"'
   '';
 in
 {
