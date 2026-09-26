@@ -5,7 +5,6 @@ name: "build-vhd"
   push:
     branches:
       - "main"
-      - "testing-actions"
   workflow_dispatch: {}
 
 permissions:
@@ -17,6 +16,7 @@ concurrency:
 
 jobs:
   build-vhd:
+    if: contains(github.event.head_commit.message, '[vhd]')
     runs-on: "ubuntu-latest"
     container:
       image: "registry.fedoraproject.org/fedora@sha256:8925a3420a5f6bd13b9230c6056d43695fa8fe5948b7013db89336a762f03893" # yamllint disable-line rule:line-length
