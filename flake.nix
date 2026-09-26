@@ -43,18 +43,12 @@
 
       sass = pkgs.dart-sass;
 
-      vhdWorkspace = uv2nix.lib.workspace.loadWorkspace {
-        workspaceRoot = ./scripts/vhd;
-      };
-      vhdPythonBase = pkgs.callPackage pyproject-nix.build.packages {
-        python = pkgs.python314;
-      };
+      vhdWorkspace = uv2nix.lib.workspace.loadWorkspace { workspaceRoot = ./scripts/vhd; };
+      vhdPythonBase = pkgs.callPackage pyproject-nix.build.packages { python = pkgs.python314; };
       vhdPython = vhdPythonBase.overrideScope (
         pkgs.lib.composeManyExtensions [
           pyproject-build-systems.overlays.wheel
-          (vhdWorkspace.mkPyprojectOverlay {
-            sourcePreference = "wheel";
-          })
+          (vhdWorkspace.mkPyprojectOverlay { sourcePreference = "wheel"; })
         ]
       );
       vhdEnv = vhdPython.mkVirtualEnv "vhd-env" vhdWorkspace.deps.default;

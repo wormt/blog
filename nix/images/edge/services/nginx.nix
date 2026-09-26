@@ -54,9 +54,17 @@ in
 {
   environment.systemPackages = [ pkgs.nginx ];
 
-  layeredImage.contents = [
-    blog
-  ];
+  layeredImage.contents = [ blog ];
+
+  users.groups.nginx = { };
+  users.users.nginx = {
+    isSystemUser = true;
+    group = "nginx";
+    description = "NGINX web server";
+    home = "/etc/nginx";
+    createHome = true;
+    shell = "${pkgs.shadow}/bin/nologin";
+  };
 
   selinux.fileContexts = {
     "/var/www/blog(/.*)?" = "httpd_sys_content_t";
@@ -176,8 +184,8 @@ in
       ExecReload = "${pkgs.nginx}/bin/nginx -s reload -c /etc/nginx/nginx.conf";
       ExecStop = "${pkgs.nginx}/bin/nginx -s quit -c /etc/nginx/nginx.conf";
       Restart = "on-failure";
-	  User = "nginx";
-	  Group = "nginx";
+      User = "nginx";
+      Group = "nginx";
     };
   };
 }
