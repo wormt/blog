@@ -61,24 +61,46 @@ in
   selinux.fileContexts = {
     "/var/www/blog(/.*)?" = "httpd_sys_content_t";
     "/var/www/challenges(/.*)?" = "httpd_sys_content_t";
+    "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/bin/nginx" = "httpd_exec_t";
+
+    # writeShellScript outputs not covered by caliga
+    "${init-cert}" = "bin_t";
   };
 
-  systemd.tmpfiles.settings."20-var-log-nginx"."/var/log/nginx".d = {
-    mode = "0700";
-    user = "root";
-    group = "root";
+  systemd.tmpfiles.settings."20-nginx-etc" = {
+    "/etc/nginx".d = {
+      mode = "0700";
+      user = "nginx";
+      group = "nginx";
+    };
+    "/etc/nginx".Z = { };
   };
 
-  systemd.tmpfiles.settings."20-var-www-challenges"."/var/www/challenges".d = {
-    mode = "0755";
-    user = "root";
-    group = "root";
+  systemd.tmpfiles.settings."20-nginx-var-log" = {
+    "/var/log/nginx".d = {
+      mode = "0700";
+      user = "nginx";
+      group = "nginx";
+    };
+    "/var/log/nginx".Z = { };
   };
+
+  systemd.tmpfiles.settings."20-challenges-var-www" = {
+    "/var/www/challenges".d = {
+      mode = "0755";
+      user = "root";
+      group = "root";
+    };
+    "/var/www/challenges".Z = { };
+  };
+
+  systemd.tmpfiles.settings."20-blog-var-www"."/var/www/blog".Z = { };
+  systemd.tmpfiles.settings."20-nginx-bin"."${pkgs.nginx}/bin/nginx".Z = { };
 
   environment.etc."nginx/nginx.conf".text = ''
-    user nobody nobody;
+    user nginx nginx;
     worker_processes auto;
-    error_log syslog:server=unix:/dev/log,nohostname;
+    error_log syslog:server=unix:/dev/log,nohostname error;
     pid /run/nginx.pid;
     daemon off;
 
@@ -91,7 +113,7 @@ in
       default_type application/octet-stream;
       sendfile on;
       keepalive_timeout 65;
-      access_log syslog:server=unix:/dev/log,nohostname;
+      access_log syslog:server=unix:/dev/log,nohostname info;
 
       server {
         listen 443 ssl;
@@ -139,13 +161,18 @@ in
     }
   '';
 
+  environment.etc."nginx/nginx.conf".mode = "0600";
+
   systemd.services.nginx = {
     description = "NGINX";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
+    user = "nginx";
+    group = "nginx";
 
     serviceConfig = {
       Type = "simple";
+      AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       ExecStartPre = [ init-cert ];
       ExecStart = "${pkgs.nginx}/bin/nginx -c /etc/nginx/nginx.conf";
       ExecReload = "${pkgs.nginx}/bin/nginx -s reload -c /etc/nginx/nginx.conf";

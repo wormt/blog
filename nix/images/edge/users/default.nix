@@ -13,4 +13,13 @@
     initialHashedPassword = "$y$j9T$ZHaXNt8NPMF5bJJasx.Kv.$qlWjFBN9dkc/4/CthvFbvjZ4QkmjEfkVWh9hpXaccS/";
 	extraGroups = ["wheel"];
   };
+
+  users.users.nginx = {
+    isSystemUser = true;
+    group = "nginx";
+    description = "NGINX web server";
+    home = "/etc/nginx";
+    createHome = true;
+    shell = "${pkgs.shadow}/bin/nologin";
+  };
 }
