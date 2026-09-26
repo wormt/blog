@@ -167,8 +167,6 @@ in
     description = "NGINX";
     after = [ "network.target" ];
     wantedBy = [ "multi-user.target" ];
-    user = "nginx";
-    group = "nginx";
 
     serviceConfig = {
       Type = "simple";
@@ -178,6 +176,8 @@ in
       ExecReload = "${pkgs.nginx}/bin/nginx -s reload -c /etc/nginx/nginx.conf";
       ExecStop = "${pkgs.nginx}/bin/nginx -s quit -c /etc/nginx/nginx.conf";
       Restart = "on-failure";
+	  User = "nginx";
+	  Group = "nginx";
     };
   };
 }
