@@ -50,6 +50,9 @@ let
         -out /etc/nginx/certs/brainworm.homes.crt
     fi
   '';
+
+  init-cert-path = builtins.unsafeDiscardStringContext "${init-cert}";
+  nginx-bin-path = builtins.unsafeDiscardStringContext "${pkgs.nginx}/bin/nginx";
 in
 {
   environment.systemPackages = [ pkgs.nginx ];
@@ -72,7 +75,7 @@ in
     "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/bin/nginx" = "httpd_exec_t";
 
     # writeShellScript outputs not covered by caliga
-    "${init-cert}" = "bin_t";
+    "${init-cert-path}" = "bin_t";
   };
 
   systemd.tmpfiles.settings."20-nginx-etc" = {
@@ -103,7 +106,7 @@ in
   };
 
   systemd.tmpfiles.settings."20-blog-var-www"."/var/www/blog".Z = { };
-  systemd.tmpfiles.settings."20-nginx-bin"."${pkgs.nginx}/bin/nginx".Z = { };
+  systemd.tmpfiles.settings."20-nginx-bin"."${nginx-bin-path}".Z = { };
 
   environment.etc."nginx/nginx.conf".text = ''
     user nginx nginx;
