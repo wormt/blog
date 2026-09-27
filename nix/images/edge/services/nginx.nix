@@ -115,7 +115,7 @@ in
     user nginx nginx;
     worker_processes auto;
     error_log syslog:server=unix:/dev/log,nohostname error;
-    pid /run/nginx.pid;
+    pid /run/nginx/nginx.pid;
     daemon off;
 
     events {
@@ -127,7 +127,7 @@ in
       default_type application/octet-stream;
       sendfile on;
       keepalive_timeout 65;
-      access_log syslog:server=unix:/dev/log,nohostname info;
+      access_log syslog:server=unix:/dev/log,nohostname;
 
       server {
         listen 443 ssl;
@@ -186,11 +186,13 @@ in
     serviceConfig = {
       Type = "simple";
       AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
+      RuntimeDirectory = "nginx";
       ExecStartPre = [
-        "+/usr/sbin/restorecon -RFvi /etc/nginx /var/log/nginx /var/www/blog /var/www/challenges"
+        "+/usr/sbin/restorecon -RFvi /etc/nginx /run/nginx /var/log/nginx /var/www/blog /var/www/challenges"
         "+/usr/sbin/restorecon -RFv ${pkgs.nginx}"
+        "+/usr/sbin/restorecon -RFv ${pkgs.glibc}"
         init-cert
-        "+/usr/sbin/restorecon -RFvi /etc/nginx"
+        "+/usr/sbin/restorecon -RFvi /etc/nginx /run/nginx"
       ];
       ExecStart = "${pkgs.nginx}/bin/nginx -c /etc/nginx/nginx.conf";
       ExecReload = "${pkgs.nginx}/bin/nginx -s reload -c /etc/nginx/nginx.conf";
