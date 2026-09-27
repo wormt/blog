@@ -1,8 +1,6 @@
 #!/usr/bin/env nu
 # Usage: tunnel-bridge.nu [LOCAL_PORT] [GUEST_PORT]
 
-# @param local_port Host port to listen on (default 8080).
-# @param guest_port Port inside the VM to forward to (default 80).
 def main [
     local_port: int = 8080 # Host port to listen on.
     guest_port: int = 80   # Port inside the VM to forward to.
@@ -17,10 +15,6 @@ def main [
     run-bridge $vm_name $podman_socket $local_port $guest_port
 }
 
-# Ensure the ssh -L forward is running inside the container.
-#
-# Starts the forward detached if it is not already running, so the
-# command is idempotent across repeated invocations.
 def ensure-ssh-forward [
     vm_name: string
     podman_socket: string
@@ -46,10 +40,6 @@ def ensure-ssh-forward [
     sleep 2sec
 }
 
-# Run the socat bridge on the host.
-#
-# socat's EXEC splits on spaces, so the podman exec is wrapped in a
-# helper script that socat invokes per connection.
 def run-bridge [
     vm_name: string
     podman_socket: string
@@ -65,14 +55,6 @@ def run-bridge [
     ^socat $"TCP-LISTEN:($local_port),reuseaddr,fork" $"EXEC:($bridge_wrapper)"
 }
 
-# Build the socat EXEC wrapper script body.
-#
-# socat's EXEC splits on spaces, so the podman exec command is wrapped
-# in a small sh script that socat invokes per connection.
-#
-# @param podman_socket Podman socket URL.
-# @param vm_name Name of the container hosting the VM.
-# @param local_port Host port to listen on.
 def build-wrapper-body [
     podman_socket: string
     vm_name: string
