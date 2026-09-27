@@ -72,7 +72,6 @@ in
   };
 
   selinux.fileContexts = {
-    "/var/www/blog(/.*)?" = "httpd_sys_content_t";
     "/var/www/challenges(/.*)?" = "httpd_sys_content_t";
     "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/bin/nginx" = "httpd_exec_t";
     "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/conf(/.*)?" = "httpd_config_t";
@@ -111,7 +110,6 @@ in
     "/var/www/challenges".Z = { };
   };
 
-  systemd.tmpfiles.settings."20-blog-var-www"."/var/www/blog".Z = { };
   systemd.tmpfiles.settings."20-nginx-bin"."${nginx-bin-path}".Z = { };
 
   environment.etc."nginx/nginx.conf".text = ''
@@ -151,7 +149,7 @@ in
         add_header Strict-Transport-Security "max-age=31536000";
         add_header Content-Security-Policy "default-src 'none';style-src 'self';img-src 'self';media-src 'self';base-uri 'none';sandbox allow-scripts;upgrade-insecure-requests;frame-ancestors 'none'";
 
-        root /var/www/blog;
+        root ${blog}/var/www/blog;
         index index.html;
 
         location / {
@@ -164,7 +162,7 @@ in
         listen [::]:80;
         server_name _;
 
-        root /var/www/blog;
+        root ${blog}/var/www/blog;
         index index.html;
 
         location /.well-known/acme-challenge/ {
@@ -206,7 +204,7 @@ in
       AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       RuntimeDirectory = "nginx";
       ExecStartPre = [
-        "+/usr/sbin/restorecon -RFvi /etc/nginx /run/nginx /var/log/nginx /var/www/blog /var/www/challenges"
+        "+/usr/sbin/restorecon -RFvi /etc/nginx /run/nginx /var/log/nginx /var/www/challenges"
         init-cert
         "+/usr/sbin/restorecon -RFvi /etc/nginx /run/nginx"
       ];
