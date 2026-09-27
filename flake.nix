@@ -43,6 +43,9 @@
 
       sass = pkgs.dart-sass;
 
+      # roc pinned to last nightly before redundant open tag union warnings
+      roc = roc-overlay.packages.${system}."nightly-2026-08-25-cc03aa8";
+
       vhdWorkspace = uv2nix.lib.workspace.loadWorkspace { workspaceRoot = ./scripts/vhd; };
       vhdPythonBase = pkgs.callPackage pyproject-nix.build.packages { python = pkgs.python314; };
       vhdPython = vhdPythonBase.overrideScope (
@@ -152,7 +155,7 @@
             pkgs.writeShellApplication {
               name = "blog-build";
               runtimeInputs = [
-                roc-overlay.packages.${system}.nightly
+                roc
               ];
               text = ''
                 echo "[blog] building renderer..."
@@ -227,7 +230,7 @@
             pkgs.writeShellApplication {
               name = "blog-all";
               runtimeInputs = [
-                roc-overlay.packages.${system}.nightly
+                roc
                 sass
                 pkgs.coreutils
                 pkgs.lightningcss
@@ -251,7 +254,7 @@
 
       devShells.${system}.default = pkgs.mkShell {
         packages = [
-          roc-overlay.packages.${system}.nightly
+          roc
           pkgs.nixd
           pkgs.nixfmt
           pkgs.racket

@@ -1,7 +1,16 @@
+import pf.Html
+import pf.HtmlAttributes
+
 Badges :: {}.{
 	html_badge : { src : Str, alt : Str } -> Str
 	html_badge = |badge|
-		"<img src='${badge.src}' alt='${badge.alt}' loading='lazy' />\n"
+	    Html.render_fragment(
+	        Html.img([
+	            HtmlAttributes.src(badge.src),
+	            HtmlAttributes.alt(badge.alt),
+	            HtmlAttributes.loading("lazy"),
+	        ]),
+	    ).concat("\n")
 
 	badges : List({ src : Str, alt : Str })
 	badges = [

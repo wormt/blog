@@ -6,7 +6,7 @@ let
       {
         __noChroot = true;
         nativeBuildInputs = [
-          inputs.roc-overlay.packages.x86_64-linux.nightly
+          inputs.roc-overlay.packages.x86_64-linux."nightly-2026-08-25-cc03aa8"
           pkgs.dart-sass
           pkgs.lightningcss
         ];
@@ -55,7 +55,12 @@ let
   init-cert-path = builtins.unsafeDiscardStringContext "${init-cert}";
   nginx-bin-path = builtins.unsafeDiscardStringContext "${pkgs.nginx}/bin/nginx";
 
-  nginx-closure = pkgs.closureInfo { rootPaths = [ pkgs.nginx blog ]; };
+  nginx-closure = pkgs.closureInfo {
+    rootPaths = [
+      pkgs.nginx
+      blog
+    ];
+  };
 in
 {
   environment.systemPackages = [ pkgs.nginx ];
