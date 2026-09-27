@@ -1,3 +1,5 @@
+import Badges
+
 Templates :: {}.{
 	PostInfo : {
 		title : Str,
@@ -109,7 +111,9 @@ Templates :: {}.{
 			.concat("</span></samp></pre>\n</section>\n")
 
 	home_badges_section = ||
-		"<section id='badges'>\n<h2>badges</h2>\n<div class='badge-grid'>\n<a href='https://example.org'><img src='/media/example.webp' alt='example badge' width='88' height='31' loading='lazy' /></a>\n<img src='/media/example2.gif' alt='another badge' width='88' height='31' loading='lazy' />\n</div>\n</section>\n"
+		"<section id='badges'>\n<h2>badges</h2>\n<div class='badge-grid'>\n"
+			.concat(List.map(Badges.badges, Badges.html_badge) -> Str.join_with(""))
+			.concat("</div>\n</section>\n")
 
 	home_webring_section = ||
 		"<section id='webring'>\n<h2>webring</h2>\n<p class='webring-nav'>\n<a href='#'>← prev</a>\n<a href='#'>some webring</a>\n<a href='#'>random</a>\n<a href='#'>next →</a>\n</p>\n</section>\n"
