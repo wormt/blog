@@ -54,7 +54,7 @@ let
   init-cert-path = builtins.unsafeDiscardStringContext "${init-cert}";
   nginx-bin-path = builtins.unsafeDiscardStringContext "${pkgs.nginx}/bin/nginx";
 
-  nginx-closure = pkgs.closureInfo { rootPaths = [ pkgs.nginx ]; };
+  nginx-closure = pkgs.closureInfo { rootPaths = [ pkgs.nginx blog ]; };
 in
 {
   environment.systemPackages = [ pkgs.nginx ];
@@ -76,6 +76,7 @@ in
     "/var/www/challenges(/.*)?" = "httpd_sys_content_t";
     "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/bin/nginx" = "httpd_exec_t";
     "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/conf(/.*)?" = "httpd_config_t";
+    "/nix/store/[a-z0-9][^/]*-blog-www(/.*)?" = "httpd_sys_content_t";
     "/etc/nginx(/.*)?" = "httpd_config_t";
     "/var/log/nginx(/.*)?" = "httpd_log_t";
 
