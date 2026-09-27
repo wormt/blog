@@ -63,20 +63,6 @@ pup vhdPath="" ssh_allowed_subnets='["127.0.0.1/32"]' image_version=IMAGE_VERSIO
 	pulumi config set sshAllowedSubnets "{{ ssh_allowed_subnets }}" -s {{ IMAGE_NAME }}
 	pulumi up -s {{ IMAGE_NAME }} -y
 
-upload vhdPath="":
-	#!/usr/bin/env bash
-	set -euo pipefail
-	if [ -n "{{ vhdPath }}" ]; then
-		vhd_path="$(realpath -m "{{ vhdPath }}")"
-	else
-		just vhd
-		vhd_path="$(realpath -m image.vhd)"
-	fi
-	account="$(cd infra && pulumi stack output sourceVhdUrl -s {{ IMAGE_NAME }} | sed -E 's~^https://([^./]+)\..*~\1~')"
-	az storage blob upload --account-name "$account" --container-name vhds \
-		--name "blog-edge-{{ IMAGE_VERSION }}.vhd" --type page \
-		--file "$vhd_path" --overwrite true --only-show-errors
-
 pdown:
 	cd infra && pulumi down -s {{ IMAGE_NAME }} -y
 
