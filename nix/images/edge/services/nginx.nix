@@ -73,6 +73,9 @@ in
     "/var/www/blog(/.*)?" = "httpd_sys_content_t";
     "/var/www/challenges(/.*)?" = "httpd_sys_content_t";
     "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/bin/nginx" = "httpd_exec_t";
+    "/nix/store/[a-z0-9][^/]*-nginx-[^/]+/conf(/.*)?" = "httpd_config_t";
+    "/etc/nginx(/.*)?" = "httpd_config_t";
+    "/var/log/nginx(/.*)?" = "httpd_log_t";
 
     # writeShellScript outputs not covered by caliga
     "${init-cert-path}" = "bin_t";
@@ -172,7 +175,8 @@ in
     }
   '';
 
-  environment.etc."nginx/nginx.conf".mode = "0600";
+  # environment.etc files are owned by root so we have to be world readable
+  environment.etc."nginx/nginx.conf".mode = "0644";
 
   systemd.services.nginx = {
     description = "NGINX";
@@ -182,7 +186,12 @@ in
     serviceConfig = {
       Type = "simple";
       AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
-      ExecStartPre = [ init-cert ];
+      ExecStartPre = [
+        "+/usr/bin/mkdir -p /var/www/challenges"
+        "+/usr/sbin/restorecon -RFv /etc/nginx /var/www/blog /var/www/challenges"
+        init-cert
+        "+/usr/sbin/restorecon -RFv /etc/nginx"
+      ];
       ExecStart = "${pkgs.nginx}/bin/nginx -c /etc/nginx/nginx.conf";
       ExecReload = "${pkgs.nginx}/bin/nginx -s reload -c /etc/nginx/nginx.conf";
       ExecStop = "${pkgs.nginx}/bin/nginx -s quit -c /etc/nginx/nginx.conf";
