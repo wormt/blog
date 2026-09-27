@@ -53,6 +53,8 @@ let
 
   init-cert-path = builtins.unsafeDiscardStringContext "${init-cert}";
   nginx-bin-path = builtins.unsafeDiscardStringContext "${pkgs.nginx}/bin/nginx";
+
+  nginx-closure = pkgs.closureInfo { rootPaths = [ pkgs.nginx ]; };
 in
 {
   environment.systemPackages = [ pkgs.nginx ];
@@ -178,9 +180,24 @@ in
   # environment.etc files are owned by root so we have to be world readable
   environment.etc."nginx/nginx.conf".mode = "0644";
 
+  systemd.services.nginx-store-relabel = {
+    description = "Relabel the nginx store closure for SELinux";
+    before = [ "nginx.service" ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "/bin/sh -c '/usr/sbin/restorecon -RFvi $(cat ${nginx-closure}/store-paths)'";
+    };
+  };
+
   systemd.services.nginx = {
     description = "NGINX";
-    after = [ "network.target" ];
+    requires = [ "nginx-store-relabel.service" ];
+    after = [
+      "nginx-store-relabel.service"
+      "network.target"
+    ];
     wantedBy = [ "multi-user.target" ];
 
     serviceConfig = {
@@ -189,8 +206,6 @@ in
       RuntimeDirectory = "nginx";
       ExecStartPre = [
         "+/usr/sbin/restorecon -RFvi /etc/nginx /run/nginx /var/log/nginx /var/www/blog /var/www/challenges"
-        "+/usr/sbin/restorecon -RFv ${pkgs.nginx}"
-        "+/usr/sbin/restorecon -RFv ${pkgs.glibc}"
         init-cert
         "+/usr/sbin/restorecon -RFvi /etc/nginx /run/nginx"
       ];
