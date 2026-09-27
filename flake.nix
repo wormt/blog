@@ -190,7 +190,8 @@
               runtimeInputs = [ pkgs.coreutils ];
               text = ''
                 echo "[blog] rendering HTML..."
-                exec ./render ./content/ ./www/
+                ./render ./content/ ./www/
+                cp -r package/badges www/badges
               '';
             }
           }/bin/blog-ssg";
@@ -213,7 +214,8 @@
                   sass --style=expanded --no-source-map package/styles/$f.scss | lightningcss --minify -o www/css/$f.css
                 done
                 echo "[blog] rendering HTML..."
-                exec ./render ./content/ ./www/
+                ./render ./content/ ./www/
+                cp -r package/badges www/badges
               '';
             }
           }/bin/blog-render";
@@ -239,7 +241,8 @@
                   sass --style=expanded --no-source-map package/styles/$f.scss | lightningcss --minify -o www/css/$f.css
                 done
                 echo "[blog] rendering HTML..."
-                exec ./render ./content/ ./www/
+                ./render ./content/ ./www/
+                cp -r package/badges www/badges
               '';
             }
           }/bin/blog-all";

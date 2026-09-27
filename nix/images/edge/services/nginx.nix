@@ -31,6 +31,7 @@ let
         mkdir -p $out/var/www/blog
         cp -r www/. $out/var/www/blog/
         cp -r css $out/var/www/blog/css
+        cp -r package/badges $out/var/www/blog/badges
       '';
   # nginx needs certs at start time, but also has to be running to serve /var/www/challenges
   # so start it with a fake cert.
