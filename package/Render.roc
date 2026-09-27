@@ -1,4 +1,4 @@
-app [main!] { pf: platform "https://github.com/lukewilliamboswell/basic-ssg/releases/download/0.10.0/26wr2c8pfpVzPv93VVQ9Y2yRQz7tder7atwNG7PvWs6e.tar.zst" }
+app [main!] { pf: platform "https://github.com/lukewilliamboswell/basic-ssg/releases/download/0.11.0/3vqgmE9dzxoPRNgCbUYrfJhcsyV1DKpi8Q8qKAsSt1Br.tar.zst" }
 
 import pf.Path
 import pf.OsStr exposing [OsStr]
@@ -6,7 +6,7 @@ import pf.SSG
 import Frontmatter
 import Templates
 
-render_page! : SSG.Page, Path.Path => Try({}, [ReadError(Str), ParseError(Str), WriteError(Str), ..])
+render_page! : SSG.Page, Path.Path => Try({}, [ReadError(Str), ParseError(Str), WriteError(Str), ..others])
 render_page! = |page, output_dir| {
     source = SSG.read_source!(page)?
     fm = Frontmatter.parse_frontmatter!(source)
@@ -34,7 +34,7 @@ render_page! = |page, output_dir| {
     })
 }
 
-collect_metadata! : List(SSG.Page) => Try(List(Templates.PostInfo), [ReadError(Str), ParseError(Str), ..])
+collect_metadata! : List(SSG.Page) => Try(List(Templates.PostInfo), [ReadError(Str), ParseError(Str), ..others])
 collect_metadata! = |pages| {
     pages.fold_try!(
         [],
@@ -54,7 +54,7 @@ collect_metadata! = |pages| {
     )
 }
 
-render_index_page! : List(Templates.PostInfo), Path.Path => Try({}, [WriteError(Str), ..])
+render_index_page! : List(Templates.PostInfo), Path.Path => Try({}, [WriteError(Str), ..others])
 render_index_page! = |posts, output_dir| {
     output_path = Path.join(Path.unix("posts"), "index.html")
     SSG.write_file!({
@@ -64,7 +64,7 @@ render_index_page! = |posts, output_dir| {
     })
 }
 
-render_home_page! : List(Templates.PostInfo), Path.Path => Try({}, [WriteError(Str), ..])
+render_home_page! : List(Templates.PostInfo), Path.Path => Try({}, [WriteError(Str), ..others])
 render_home_page! = |posts, output_dir| {
     output_path = Path.from_os_str(OsStr.from_str("index.html"))
     SSG.write_file!({
@@ -74,7 +74,7 @@ render_home_page! = |posts, output_dir| {
     })
 }
 
-render_all! : List(SSG.Page), Path.Path => Try({}, [ReadError(Str), ParseError(Str), WriteError(Str), ..])
+render_all! : List(SSG.Page), Path.Path => Try({}, [ReadError(Str), ParseError(Str), WriteError(Str), ..others])
 render_all! = |pages, output_dir| {
     metadata = collect_metadata!(pages)?
     render_home_page!(List.take_first(metadata, 5), output_dir)?
@@ -82,7 +82,7 @@ render_all! = |pages, output_dir| {
     render_individual_pages!(pages, output_dir)
 }
 
-render_individual_pages! : List(SSG.Page), Path.Path => Try({}, [ReadError(Str), ParseError(Str), WriteError(Str), ..])
+render_individual_pages! : List(SSG.Page), Path.Path => Try({}, [ReadError(Str), ParseError(Str), WriteError(Str), ..others])
 render_individual_pages! = |pages, output_dir|
     match pages {
         [] => Ok({})
@@ -92,14 +92,14 @@ render_individual_pages! = |pages, output_dir|
         }
     }
 
-main! : List(OsStr) => Try({}, [Exit(I32), PagesError(Str), ReadError(Str), ParseError(Str), WriteError(Str), ..])
+main! : List(OsStr) => Try({}, [Exit(I32), PagesError(Str), ReadError(Str), ParseError(Str), WriteError(Str), ..others])
 main! = |args|
     match args.drop_first(1) {
         [input_dir_arg, output_dir_arg] => {
             input_dir = Path.from_os_str(input_dir_arg)
             output_dir = Path.from_os_str(output_dir_arg)
 
-            pages = SSG.pages!(input_dir)?
+            pages = SSG.markdown_pages!(input_dir)?
             render_all!(pages, output_dir)?
             Ok({})
         }

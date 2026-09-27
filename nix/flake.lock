@@ -3,11 +3,11 @@
     "bootc-image-prefetcher": {
       "flake": false,
       "locked": {
-        "lastModified": 1790414485,
-        "narHash": "sha256-4GEcFyyXMcVGy5SqQy2GhfQXaGzPIKZ8uc/ZHeTwrLk=",
+        "lastModified": 1790503618,
+        "narHash": "sha256-CENEcEo6z7Rj2j5h7MJIzRxq8Tmy01RlgGBo6MYlQG8=",
         "owner": "nix-caliga",
         "repo": "bootc-image-prefetcher",
-        "rev": "c9a15be9b928a4cd162bbef50c06ea13227e6cec",
+        "rev": "4759199aef4c991eb994978da0734163bb1122cd",
         "type": "github"
       },
       "original": {
@@ -77,11 +77,11 @@
         "nixpkgs-darwin": "nixpkgs-darwin"
       },
       "locked": {
-        "lastModified": 1790217927,
-        "narHash": "sha256-fhatlsqelliHOfoT723TYQb8DzxSn698DpobgiARHIM=",
+        "lastModified": 1790499958,
+        "narHash": "sha256-CJCTO4GIwaiJ0eq9XFKOVY5R6pcAfncDpJXtQ65nOG8=",
         "owner": "roc-lang",
         "repo": "roc-overlay",
-        "rev": "06198bdac7c2a171c93d0a6f0ddeea562867ee1e",
+        "rev": "e2fd3eeabe067747f6e91c59694cd57e93bf098e",
         "type": "github"
       },
       "original": {
