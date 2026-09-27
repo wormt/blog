@@ -187,10 +187,10 @@ in
       Type = "simple";
       AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
       ExecStartPre = [
-        "+/usr/bin/mkdir -p /var/www/challenges"
-        "+/usr/sbin/restorecon -RFv /etc/nginx /var/www/blog /var/www/challenges"
+        "+/usr/sbin/restorecon -RFvi /etc/nginx /var/log/nginx /var/www/blog /var/www/challenges"
+        "+/usr/sbin/restorecon -RFv ${pkgs.nginx}"
         init-cert
-        "+/usr/sbin/restorecon -RFv /etc/nginx"
+        "+/usr/sbin/restorecon -RFvi /etc/nginx"
       ];
       ExecStart = "${pkgs.nginx}/bin/nginx -c /etc/nginx/nginx.conf";
       ExecReload = "${pkgs.nginx}/bin/nginx -s reload -c /etc/nginx/nginx.conf";
