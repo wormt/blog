@@ -18,14 +18,24 @@ main.home {
     }
   }
 
-  .columns {
+  @mixin columns-base {
     display: grid;
     grid-template-columns: 3fr 2fr;
     gap: 0 2.5rem;
-
+  
     @media (max-width: 44em) {
       grid-template-columns: 1fr;
     }
+  }
+
+  .columns {
+    grid-template-columns: 3fr 2fr;
+    @include columns-base
+  }
+
+  .columns-rev {
+    grid-template-columns: 2fr 3fr;
+    @include columns-base
   }
 
   .wrap {
@@ -55,6 +65,7 @@ main.home {
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+    font-size: .5rem;
   }
 
   .badge-grid {
