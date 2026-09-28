@@ -1,3 +1,19 @@
+// Copyright (C) 2026  wormt <209373679+wormt@users.noreply.github.com>
+// SPDX-License-Identifier: AGPL-3.0-or-later
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 package bloginfra.resources;
 
 import bloginfra.Region;
@@ -116,7 +132,7 @@ public final class ImageResource {
                 .galleryName(GALLERY_NAME)
                 .resourceGroupName(rg.name())
                 .location(APP_REGION_PRIMARY.name())
-                .description("Bootc images for the monoblog edge server")
+                .description("Bootc images for the brainworm.homes server")
                 .tags(tags)
                 .build());
 
@@ -138,7 +154,7 @@ public final class ImageResource {
                         .offer("monoblog")
                         .sku("edge")
                         .build())
-                .description("Specialized Fedora bootc image for monoblog")
+                .description("Specialized Fedora bootc image for brainworm.homes")
                 .tags(tags)
                 .build());
 

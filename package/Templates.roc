@@ -1,3 +1,19 @@
+# Copyright (C) 2026  wormt <209373679+wormt@users.noreply.github.com>
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import Badges
 
 Templates :: {}.{
@@ -121,5 +137,5 @@ Templates :: {}.{
 		"<section id='webring'>\n<h2>webring</h2>\n<p class='webring-nav'>\n<a href='#'>← prev</a>\n<a href='#'>some webring</a>\n<a href='#'>random</a>\n<a href='#'>next →</a>\n</p>\n</section>\n"
 
 	html_footer = ||
-		"<footer><a href='https://github.com/wormt/blog'>[source]</a> | Web content licensed CC BY-SA 4.0 unless otherwise noted</footer>\n</body>\n</html>"
+		"<footer><a href='https://github.com/wormt/blog'>[source]</a> | Content CC BY-SA 4.0 | Site code AGPL-3.0-or-later</footer>\n</body>\n</html>"
 }
