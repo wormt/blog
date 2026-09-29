@@ -30,6 +30,7 @@ Badges :: {}.{
 
 	badges : List({ src : Str, alt : Str })
 	badges = [
+		{ src: "/badges/brainworm.webp", alt: "brainworm.homes" },
 		{ src: "/badges/wormpinkbadge.webp", alt: "wormpinkbadge" },
 		{ src: "/badges/stamp_pleroma_now.png", alt: "pleroma now" },
 		{ src: "/badges/fedora.gif", alt: "fedora" },
