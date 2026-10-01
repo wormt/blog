@@ -39,6 +39,7 @@ Badges :: {}.{
 		{ src: "/badges/freerobuxextremist.webp", alt: "freerobuxextremist.com", href: "https://freerobuxextremist.com/" },
 		{ src: "/badges/wormpinkbadge.webp", alt: "wormpinkbadge", href: "https://worm.pink/" },
 		{ src: "/badges/stamp_pleroma_now.png", alt: "pleroma now", href: "https://pleroma.social/" },
+		{ src: "/badges/servfail-88_31.png", alt: "servfail authoritative dns", href: "https://servfail.network/" },
 		{ src: "/badges/fedora.gif", alt: "fedora", href: "https://fedoraproject.org/" },
 		{ src: "/badges/poweredbynixos.png", alt: "poweredbynixos", href: "https://github.com/nix-caliga/nix-caliga" },
 		{ src: "/badges/grapheneos.gif", alt: "grapheneos", href: "https://grapheneos.org/" },
