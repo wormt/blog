@@ -22,7 +22,7 @@ let
       {
         __noChroot = true;
         nativeBuildInputs = [
-          inputs.roc-overlay.packages.x86_64-linux."nightly-2026-08-25-cc03aa8"
+          inputs.roc-overlay.packages.x86_64-linux."nightly-2026-10-04-130536d"
           pkgs.dart-sass
           pkgs.lightningcss
         ];
