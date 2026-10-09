@@ -293,32 +293,52 @@ home_fetch_section = ||
 		.concat("</span></samp></pre>\n</section>\n")
 
 home_badges_section = ||
-	"<section id='badges'>\n<h2>badges</h2>\n<div class='badge-grid'>\n"
-		.concat(List.map(badges, html_badge) -> Str.join_with(""))
-		.concat("</div>\n</section>\n")
+	Html.render_fragment(
+		Html.section(
+			[HtmlAttributes.id("badges")],
+			[
+				Html.h2([],[Html.text("badges")]),
+				Html.div(
+					[HtmlAttributes.class("badge-grid")],
+					[Html.text(List.map(badges, html_badge) -> Str.join_with(""))]
+				)
+			]
+		)
+	)
+####"<section id='badges'>\n<h2>badges</h2>\n<div class='badge-grid'>\n"
+####	.concat(List.map(badges, html_badge) -> Str.join_with(""))
+####	.concat("</div>\n</section>\n")
 
 home_webring_section = ||
 	"<section id='webring'>\n<h2>webring</h2>\n<p class='webring-nav'>\n<a href='#'>← prev</a>\n<a href='#'>some webring</a>\n<a href='#'>random</a>\n<a href='#'>next →</a>\n</p>\n</section>\n"
 
 html_footer = ||
-	"<footer><a href='https://github.com/wormt/blog'>[source]</a> | Content CC BY-SA 4.0 | Site code AGPL-3.0-or-later</footer>\n</body>\n</html>"
+	Html.render_fragment(
+		Html.footer(
+			[],
+			[Html.a(
+				[HtmlAttributes.href("https://github.com/wormt/blog")],
+				[Html.text("Content")],
+			)],
+		),
+	)
+
+## Badges
 
 html_badge : { src : Str, alt : Str, href : Str } -> Str
 html_badge = |badge|
-    Html.render_fragment(
-        Html.a(
-            [HtmlAttributes.href(badge.href)],
-            [
-                Html.img([
-                    HtmlAttributes.src(badge.src),
-                    HtmlAttributes.alt(badge.alt),
-                    HtmlAttributes.loading("lazy"),
-                ]),
-            ],
-        ),
-    ).concat("\n")
-
-## Badges
+	Html.render_fragment(
+		Html.a(
+			[HtmlAttributes.href(badge.href)],
+			[
+				Html.img([
+					HtmlAttributes.src(badge.src),
+					HtmlAttributes.alt(badge.alt),
+					HtmlAttributes.loading("lazy"),
+				]),
+			],
+		),
+	).concat("\n")
 
 badges : List({ src : Str, alt : Str, href : Str })
 badges = [
