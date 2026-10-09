@@ -39,6 +39,8 @@ PODMAN_SOCKET := "unix:///run/user/6969/podman/podman.sock"
 PODMAN        := "podman --remote --url unix:///run/user/6969/podman/podman.sock"
 BCVK          := "distrobox-host-exec bash -lc 'export PATH=/var/home/asv/.local/bin:$PATH; cd /var/home/asv/workspaces/roc/blog2 && bcvk"
 
+default: rebuild
+
 podman *args:
 	{{PODMAN}} {{args}}
 

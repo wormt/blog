@@ -192,7 +192,7 @@ in
           alias /var/www/challenges/;
         }
         location / {
-          return 301 https://brainworm.homes$request_uri;
+          try_files $uri $uri/ =404;
         }
       }
     }
