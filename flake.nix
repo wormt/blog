@@ -60,7 +60,7 @@
       sass = pkgs.dart-sass;
 
       # roc pinned to last nightly before redundant open tag union warnings
-      roc = roc-overlay.packages.${system}."nightly-2026-08-25-cc03aa8";
+      roc = roc-overlay.packages.${system}."nightly-2026-10-04-130536d";
 
       vhdWorkspace = uv2nix.lib.workspace.loadWorkspace { workspaceRoot = ./scripts/vhd; };
       vhdPythonBase = pkgs.callPackage pyproject-nix.build.packages { python = pkgs.python314; };
