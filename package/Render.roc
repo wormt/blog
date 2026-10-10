@@ -355,7 +355,7 @@ badges = [
 	{ src: "/badges/deadlyprogramming.gif", alt: "deadlyprogramming", href: "https://brainworm.homes/" },
 	{ src: "/badges/seedyourtorrents.gif", alt: "seedyourtorrents", href: "https://brainworm.homes/" },
 	{ src: "/badges/eff.png", alt: "eff", href: "https://www.eff.org/" },
-	{ src: "/badges/tor.gif", alt: "tor", href: "https://www.torproject.org/" },
+	{ src: "/badges/tor.gif", alt: "tor", href: "https://pomf2.lain.la/f/bp5zmzq7.mp4" },
 	{ src: "/badges/fuckdrm.gif", alt: "fuckdrm", href: "https://www.defectivebydesign.org/" },
 	{ src: "/badges/ipv6.gif", alt: "ipv6", href: "https://brainworm.homes/" },
 	{ src: "/badges/lynx_enh.gif", alt: "lynx enh", href: "https://lynx.invisible-island.net/" },
