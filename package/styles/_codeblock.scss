@@ -14,28 +14,38 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+pre,
+code,
+samp {
+  font-family: var(--font-mono);
+}
+
 pre {
-  margin: 1.5rem 0;
+  overflow-x: auto;
+  margin: 1rem 0;
   padding: 0;
   white-space: pre;
 }
+
 pre > samp {
-  font-family: monospace;
-  font-size: 0.875rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 4px;
-  padding: 1rem 1.25rem;
-  overflow-x: auto;
   display: block;
-  line-height: 1.6;
+  overflow-x: auto;
+  padding: 1rem;
+  border: 3px solid var(--color-border);
+  background: var(--color-surface-code);
+  box-shadow: 5px 5px 0 0 var(--shadow-color);
+  color: var(--color-link);
+  font-size: 0.9rem;
+  line-height: 1.45;
   white-space: pre;
 }
+
 pre > samp span {
   display: inline;
-  line-height: 1.6;
   height: auto;
+  line-height: 1.45;
 }
+
 pre > samp span.meta.block.rust,
 pre > samp span.punctuation.section.block.begin.rust,
 pre > samp span.punctuation.section.block.end.rust {
@@ -44,10 +54,9 @@ pre > samp span.punctuation.section.block.end.rust {
 }
 
 code {
-  font-family: monospace;
-  background: var(--color-surface-code);
   padding: 0.125rem 0.375rem;
-  border-radius: 3px;
-  font-size: 0.875em;
-  color: var(--color-accent-cyan);
+  border: 2px solid var(--color-border);
+  background: var(--color-surface-code);
+  color: var(--color-link);
+  font-size: 0.9em;
 }

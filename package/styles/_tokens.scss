@@ -14,23 +14,113 @@
 // You should have received a copy of the GNU Affero General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+@property --fetch-gradient-start {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #ffd166;
+}
+
 :root,
 :host {
+  --font-sans:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    sans-serif;
+  --font-mono:
+    ui-monospace,
+    "SFMono-Regular",
+    "Cascadia Code",
+    "Liberation Mono",
+    monospace;
+  --color-surface-hi: #12122a;
+  --color-surface-hi-strong: #111126;
+  --surface-gradient: linear-gradient(180deg, var(--color-surface-hi), var(--color-surface));
+  --surface-gradient-strong: linear-gradient(180deg, var(--color-surface-hi-strong), var(--color-surface));
+  --shadow-color: #000;
+  --shadow-sm: 3px 3px 0 0 var(--shadow-color);
+  --shadow-md: 5px 5px 0 0 var(--shadow-color);
+  --shadow-lg: 6px 6px 0 0 var(--shadow-color);
+  --shadow-xl: 8px 8px 0 0 var(--shadow-color);
+  --shadow-lift: 11px 11px 0 0 var(--shadow-color);
   --color-bg: #080814;
   --color-surface: #0d0d20;
-  --color-surface-code: #12122a;
-  --color-text-heading: #fff;
-  --color-text-secondary: #c8c8d8;
-  --color-text-muted: #9494ac;
-  --color-link: #6e9fd4;
-  --color-link-hover: #8dbae8;
-  --color-accent-purple: #8a6faa;
-  --color-accent-green: #4a8b5e;
-  --color-accent-cyan: #5a9eaa;
-  --color-accent-red: #7a1c24;
-  --color-border: #2a2a42;
-  --color-border-muted: #1e1e32;
-  --color-error: #cc4444;
-  --color-warning: #d4a030;
-  --color-focus-ring: rgba(110, 159, 212, 0.6);
+  --color-surface-code: #020208;
+  --color-surface-inset: #020208;
+  --color-text-heading: #f4f4ff;
+  --color-text-secondary: #d6d6e4;
+  --color-text-muted: #b6b6d6;
+  --color-link: #ffb000;
+  --color-link-hover: #080814;
+  --color-accent-purple: #9696a5;
+  --color-accent-green: #d7a027;
+  --color-accent-cyan: #ffb000;
+  --color-accent-red: #ff6534;
+  --color-border: #f4f4ff;
+  --color-border-muted: #2a2a42;
+  --color-error: #ff6534;
+  --color-warning: #ffb000;
+  --color-focus-ring: #ffb000;
+  --color-comment: #9595ab;
+  --color-glitch-a: #ff00c8;
+  --color-glitch-b: #00e5ff;
+  --color-glitch-c: #b8ff00;
+  --scanline-color: rgba(0, 255, 176, 0.035);
+  --glow-a: rgba(176, 0, 255, 0.12);
+  --glow-b: rgba(255, 61, 0, 0.08);
+  --sheen: rgba(255, 255, 255, 0.03);
+  --sheen-subtle: rgba(255, 255, 255, 0.02);
+  --row-alt: rgba(0, 0, 0, 0.24);
+}
+
+@media (prefers-color-scheme: light) {
+  :root,
+  :host {
+    --fetch-gradient-start: #b73200;
+    --color-surface-hi: #ffffff;
+    --color-surface-hi-strong: #ffffff;
+    --color-bg: #eef0f7;
+    --color-surface: #e3e6f0;
+    --color-surface-code: #020208;
+    --color-surface-inset: #c9cbd4;
+    --color-text-heading: #0a0a18;
+    --color-text-secondary: #1d1d30;
+    --color-text-muted: #43435c;
+    --color-link: #7c3600;
+    --color-link-hover: #ffffff;
+    --color-accent-purple: #5e3f99;
+    --color-accent-green: #1f5f33;
+    --color-accent-cyan: #7c3600;
+    --color-accent-red: #a12600;
+    --color-border: #16162c;
+    --color-border-muted: #c4c8dc;
+    --color-error: #a12600;
+    --color-warning: #7c3600;
+    --color-focus-ring: #7c3600;
+    --color-comment: #535368;
+    --scanline-color: rgba(20, 20, 60, 0.07);
+    --glow-a: rgba(110, 60, 220, 0.1);
+    --glow-b: rgba(200, 90, 0, 0.08);
+    --sheen: rgba(255, 255, 255, 0.45);
+    --sheen-subtle: rgba(255, 255, 255, 0.5);
+    --row-alt: rgba(20, 20, 60, 0.05);
+  }
+
+  pre > samp,
+  code {
+    --color-link: #ffb000;
+  }
+
+  pre > samp {
+    --fetch-gradient-start: #ffd166;
+    --color-text-secondary: #d6d6e4;
+    --color-text-muted: #b6b6d6;
+    --color-warning: #ffb000;
+    --color-accent-purple: #9696a5;
+    --color-accent-green: #d7a027;
+    --color-error: #ff6534;
+    --color-comment: #9595ab;
+  }
+
 }

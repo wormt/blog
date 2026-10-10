@@ -20,10 +20,10 @@ $syntax-colors: (
   variable: var(--color-link),
   string: var(--color-accent-green),
   constant: var(--color-warning),
-  entity: var(--color-accent-cyan),
-  support: var(--color-accent-cyan),
+  entity: var(--color-text-secondary),
+  support: var(--color-text-secondary),
   punctuation: var(--color-text-muted),
-  comment: #5a5a72,
+  comment: var(--color-comment),
 );
 
 @each $name, $color in $syntax-colors {
