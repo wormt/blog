@@ -47,7 +47,8 @@
   --color-bg: #080814;
   --color-surface: #0d0d20;
   --color-surface-code: #020208;
-  --color-surface-inset: #020208;
+  --color-surface-inset: #050514;
+  --color-surface-inset-alt: #020208;
   --color-text-heading: #f4f4ff;
   --color-text-secondary: #d6d6e4;
   --color-text-muted: #b6b6d6;
@@ -77,17 +78,17 @@
 @media (prefers-color-scheme: light) {
   :root,
   :host {
-    --fetch-gradient-start: #b73200;
     --color-surface-hi: #ffffff;
     --color-surface-hi-strong: #ffffff;
     --color-bg: #eef0f7;
     --color-surface: #e3e6f0;
     --color-surface-code: #020208;
-    --color-surface-inset: #c9cbd4;
+    --color-surface-inset: #e0e1e6;
+    --color-surface-inset-alt: #c9cbd4;
     --color-text-heading: #0a0a18;
     --color-text-secondary: #1d1d30;
     --color-text-muted: #43435c;
-    --color-link: #7c3600;
+    --color-link: #ff7a00;
     --color-link-hover: #ffffff;
     --color-accent-purple: #5e3f99;
     --color-accent-green: #1f5f33;
