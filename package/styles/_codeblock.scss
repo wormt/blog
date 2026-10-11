@@ -27,7 +27,7 @@ pre {
   white-space: pre;
 }
 
-pre > samp {
+pre>samp {
   display: block;
   overflow-x: auto;
   padding: 1rem;
@@ -40,15 +40,21 @@ pre > samp {
   white-space: pre;
 }
 
-pre > samp span {
+pre>samp span {
   display: inline;
   height: auto;
   line-height: 1.45;
 }
 
-pre > samp span.meta.block.rust,
-pre > samp span.punctuation.section.block.begin.rust,
-pre > samp span.punctuation.section.block.end.rust {
+pre>samp:not(#fetch > pre > samp)::after,
+code::after {
+  content: "█";
+  color: var(--color-glitch-b);
+}
+
+pre>samp span.meta.block.rust,
+pre>samp span.punctuation.section.block.begin.rust,
+pre>samp span.punctuation.section.block.end.rust {
   display: inline !important;
   margin-bottom: 0 !important;
 }

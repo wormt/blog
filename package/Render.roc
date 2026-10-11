@@ -29,7 +29,10 @@ render_page! = |page, output_dir| {
 	source = SSG.read_source!(page)?
 	fm = parse_frontmatter!(source)
 	body_str = extract_body(source)
-	body_html = SSG.render_markdown!({ source_path: page.source_path, markdown: body_str })?
+	body_html =
+		SSG.render_markdown!({ source_path: page.source_path, markdown: body_str })?
+		|> Str.replace_each("\n</span></samp>", "</span></samp>")
+		|> Str.replace_each("\n</samp>", "</samp>")
 	meta_desc = if fm.description.is_empty() "" else fm.description
 	tags_list = fm.tags
 
