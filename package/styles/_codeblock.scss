@@ -46,12 +46,6 @@ pre>samp span {
   line-height: 1.45;
 }
 
-pre>samp:not(#fetch > pre > samp)::after,
-code::after {
-  content: "█";
-  color: var(--color-glitch-b);
-}
-
 pre>samp span.meta.block.rust,
 pre>samp span.punctuation.section.block.begin.rust,
 pre>samp span.punctuation.section.block.end.rust {
