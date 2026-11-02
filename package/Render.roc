@@ -266,9 +266,9 @@ home_contact_section = ||
 	"<section id='contact'>\n<h2>contact</h2>\n<ul>\n"
 	.concat("<li>email: wormt <AT> brainworm [d0t] homes <a href='https://keys.openpgp.org/search?q=wormt%40brainworm.homes'>[PGP]</a></li>\n</li>\n")
 	.concat("<li>signal: <a href='sgnl://signal.me/#eu/wHd5AQFhcfg2lIZytRybPCT4TdfMhvwG7Ctbaz0_ZDn2N_XURKJLIr20fH02v3IM'>hyphen.99</a></li>\n")
-	.concat("<li>irc: l0b0t0my</li>\n</ul>\n")
-	.concat("<li>matrix: @rippsi:unredacted.org</li>\n</ul>\n")
-	.concat("<li>xmpp: ask</li>\n</ul>\n")
+	.concat("<li>irc: l0b0t0my</li>\n")
+	.concat("<li>matrix: @rippsi:unredacted.org</li>\n")
+	.concat("<li>xmpp: ask</li>\n")
 	.concat("<li>discord: ask</li>\n</ul>\n")
 	.concat("<p class='wrap'><a href='https://age-encryption.org'>age</a>: age1vruuj5f3c4mt8w3fcur2wfztf566vj0pdeta3j4tfu2p84ualpaqacdcdl</p>\n")
 	.concat("<p class='wrap'>xmr: 42arGdsJssv9fVkjmnESwsFqw6jEVFVpHhXgMUESo7LP4fFTHXYzbkXNLjNsB4cefFKaHX3fWopcuSSxpsvrxoqFKxjhxr3</p>\n")
