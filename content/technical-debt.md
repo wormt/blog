@@ -1,6 +1,6 @@
 ---
 title: A Website Built on Technical Debt
-date: 2026-09-27
+date: 2026-11-01
 tags: nix, bootc, roc, java, sass, pulumi, racket
 description: what this website is
 ---
